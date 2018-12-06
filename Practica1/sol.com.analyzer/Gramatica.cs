@@ -14,9 +14,9 @@ namespace Practica1.sol.com.analizador
 
             #region ER
             RegexBasedTerminal numero = new RegexBasedTerminal("numero", "[0-9]+");
-            //RegexBasedTerminal numeroDecimal = new RegexBasedTerminal("numeroDecimal", "[0-9]+[.][0-9]+");
+            RegexBasedTerminal numeroDecimal = new RegexBasedTerminal("numeroDecimal", "[0-9]+[.][0-9]+");
             IdentifierTerminal identificador = new IdentifierTerminal("identificador");
-            //StringLiteral cadena = new StringLiteral("cadena", "\"", StringOptions.IsTemplate);
+            StringLiteral cadena = new StringLiteral("cadena", "\"", StringOptions.IsTemplate);
             #endregion
 
             #region Terminales
@@ -34,11 +34,11 @@ namespace Practica1.sol.com.analizador
             var menos = ToTerm("-");
             var por = ToTerm("*");
             var div = ToTerm("/");
-            var menor = ToTerm("<");
-            var mayor = ToTerm(">");
-            var menorQ = ToTerm("<=");
-            var mayorQ = ToTerm(">=");
-            var igual = ToTerm("==");
+            //var menor = ToTerm("<");
+            //var mayor = ToTerm(">");
+            //var menorQ = ToTerm("<=");
+            //var mayorQ = ToTerm(">=");
+            //var igual = ToTerm("==");
             var distinto = ToTerm("!=");
             var and = ToTerm("&&");
             var or = ToTerm("||");
@@ -83,16 +83,16 @@ namespace Practica1.sol.com.analizador
 
             #region No Terminales
             NonTerminal INICIO = new NonTerminal("INICIO");
-            NonTerminal E = new NonTerminal("E");
+            NonTerminal EXPR = new NonTerminal("EXPR");
+            NonTerminal CONDICION = new NonTerminal("CONDICION");
+            NonTerminal ASIGNACION_VAR = new NonTerminal("ASIGNACION_VAR");
+            NonTerminal TIPO_ASIGN_VAR = new NonTerminal("TIPO_ASIGN_VAR");
             NonTerminal CLASE = new NonTerminal("CLASE");
             NonTerminal LISTA_CLASES = new NonTerminal("LISTA_CLASES");
             NonTerminal LISTA_SENTENCIAS = new NonTerminal("LISTA_SENTENCIAS");
             NonTerminal VISIBILIDAD = new NonTerminal("VISIBILIDAD");
             NonTerminal VARIABLES_GLOBALES = new NonTerminal("VARIABLES_GLOBALES");
             NonTerminal TIPO = new NonTerminal("TIPO");
-            NonTerminal ASIGNACION = new NonTerminal("ASIGNACION");
-
-
             #endregion
 
             #region Gramatica
@@ -109,7 +109,13 @@ namespace Practica1.sol.com.analizador
                                    |VARIABLES_GLOBALES
                                    |Empty;
 
-            VARIABLES_GLOBALES.Rule = VISIBILIDAD + TIPO + identificador + ptoYComa;
+            VARIABLES_GLOBALES.Rule = VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR + ptoYComa;
+
+            ASIGNACION_VAR.Rule = asignacion + TIPO_ASIGN_VAR
+                                 |Empty;
+
+            TIPO_ASIGN_VAR.Rule = EXPR
+                                 |CONDICION;
 
             VISIBILIDAD.Rule = _public
                               | _private
@@ -122,12 +128,27 @@ namespace Practica1.sol.com.analizador
                        | _decimal
                        | identificador;
 
+            EXPR.Rule = EXPR + por + EXPR
+                   | EXPR + div + EXPR
+                   | EXPR + mas + EXPR
+                   | EXPR + menos + EXPR
+                   | parentesisAb + EXPR + parentesisCerr
+                   | numero
+                   | numeroDecimal
+                   | identificador
+                   | cadena
+                   | menos + EXPR
+                   | mas + EXPR;
 
-            E.Rule = E + mas + E
-                   | E + menos + E
-                   | E + por + E
-                   | E + div + E
-                   | numero;
+            CONDICION.Rule =  EXPR + _mayor + EXPR
+                            | EXPR + _mayorQ + EXPR
+                            | EXPR + _menor + EXPR
+                            | EXPR + _menorQ + EXPR
+                            | EXPR + _equivalente + EXPR
+                            | EXPR + _distinto + EXPR
+                            | _not + CONDICION
+                            | parentesisAb + CONDICION + parentesisCerr
+                            ;
             #endregion
 
             #region Preferencias

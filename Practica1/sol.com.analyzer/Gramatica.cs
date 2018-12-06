@@ -53,8 +53,8 @@ namespace Practica1.sol.com.analizador
             KeyTerm _protected = ToTerm("Pro");
             KeyTerm _bool = ToTerm("Bool");
             KeyTerm _decimal = ToTerm("Dec");
-            KeyTerm _numero = ToTerm("Num");
             KeyTerm _str = ToTerm("Str");
+            KeyTerm _num = ToTerm("Num");
             KeyTerm _prop = ToTerm("prop");
             KeyTerm _return = ToTerm("ret");
             KeyTerm _sif = ToTerm("sif");
@@ -77,6 +77,8 @@ namespace Practica1.sol.com.analizador
             KeyTerm _case = ToTerm("cas");
             KeyTerm _default = ToTerm("def");
             KeyTerm _select = ToTerm("select");
+            KeyTerm _new = ToTerm("inst");
+
             #endregion
 
             #region No Terminales
@@ -84,6 +86,12 @@ namespace Practica1.sol.com.analizador
             NonTerminal E = new NonTerminal("E");
             NonTerminal CLASE = new NonTerminal("CLASE");
             NonTerminal LISTA_CLASES = new NonTerminal("LISTA_CLASES");
+            NonTerminal LISTA_SENTENCIAS = new NonTerminal("LISTA_SENTENCIAS");
+            NonTerminal VISIBILIDAD = new NonTerminal("VISIBILIDAD");
+            NonTerminal VARIABLES_GLOBALES = new NonTerminal("VARIABLES_GLOBALES");
+            NonTerminal TIPO = new NonTerminal("TIPO");
+            NonTerminal ASIGNACION = new NonTerminal("ASIGNACION");
+
 
             #endregion
 
@@ -91,9 +99,29 @@ namespace Practica1.sol.com.analizador
             INICIO.Rule = LISTA_CLASES;
 
             LISTA_CLASES.Rule = LISTA_CLASES + CLASE
-                         |CLASE;
+                               |LISTA_CLASES + VARIABLES_GLOBALES
+                               |CLASE
+                               |VARIABLES_GLOBALES;
 
             CLASE.Rule = _conteiner + identificador + corcheteAb + corcheteCerr;
+
+            LISTA_SENTENCIAS.Rule = LISTA_SENTENCIAS + VARIABLES_GLOBALES
+                                   |VARIABLES_GLOBALES
+                                   |Empty;
+
+            VARIABLES_GLOBALES.Rule = VISIBILIDAD + TIPO + identificador + ptoYComa;
+
+            VISIBILIDAD.Rule = _public
+                              | _private
+                              | _protected
+                              |Empty;
+
+            TIPO.Rule = _str
+                       | _num
+                       | _bool
+                       | _decimal
+                       | identificador;
+
 
             E.Rule = E + mas + E
                    | E + menos + E

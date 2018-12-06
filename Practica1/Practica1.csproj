@@ -35,6 +35,9 @@
     <Reference Include="Irony">
       <HintPath>..\..\irony\sourceCode\irony\Irony.Interpreter\bin\Debug\Irony.dll</HintPath>
     </Reference>
+    <Reference Include="Irony.Interpreter">
+      <HintPath>..\..\irony\sourceCode\irony\Irony.Interpreter\bin\Debug\Irony.Interpreter.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,7 +59,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="sol.com.analyzer\Grammar.cs" />
+    <Compile Include="sol.com.analyzer\Gramatica.cs" />
+    <Compile Include="sol.com.analyzer\Syntactic.cs" />
     <Compile Include="sol.com.window\Archive.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>

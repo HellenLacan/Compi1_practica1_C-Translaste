@@ -8,15 +8,15 @@ using Irony.Parsing;
 
 namespace Practica1.sol.com.analizador
 {
-    class Grammar: Irony.Parsing.Grammar
+    class Gramatica : Grammar
     {
-        public Grammar(): base(caseSensitive:true) {
+        public Gramatica(): base(caseSensitive:true) {
 
             #region ER
-            RegexBasedTerminal numero = new RegexBasedTerminal("numeroDecimal", "[0-9]+");
-            RegexBasedTerminal numeroDecimal = new RegexBasedTerminal("numeroDecimal", "[0-9]+[.][0-9]+");
-            IdentifierTerminal id = new IdentifierTerminal("id");
-            StringLiteral cadena = new StringLiteral("cadena", "\"", StringOptions.IsTemplate);
+            RegexBasedTerminal numero = new RegexBasedTerminal("numero", "[0-9]+");
+            //RegexBasedTerminal numeroDecimal = new RegexBasedTerminal("numeroDecimal", "[0-9]+[.][0-9]+");
+            IdentifierTerminal identificador = new IdentifierTerminal("identificador");
+            //StringLiteral cadena = new StringLiteral("cadena", "\"", StringOptions.IsTemplate);
             #endregion
 
             #region Terminales
@@ -77,6 +77,33 @@ namespace Practica1.sol.com.analizador
             KeyTerm _case = ToTerm("cas");
             KeyTerm _default = ToTerm("def");
             KeyTerm _select = ToTerm("select");
+            #endregion
+
+            #region No Terminales
+            NonTerminal INICIO = new NonTerminal("INICIO");
+            NonTerminal E = new NonTerminal("E");
+            NonTerminal CLASE = new NonTerminal("CLASE");
+            NonTerminal LISTA_CLASES = new NonTerminal("LISTA_CLASES");
+
+            #endregion
+
+            #region Gramatica
+            INICIO.Rule = LISTA_CLASES;
+
+            LISTA_CLASES.Rule = LISTA_CLASES + CLASE
+                         |CLASE;
+
+            CLASE.Rule = _conteiner + identificador + corcheteAb + corcheteCerr;
+
+            E.Rule = E + mas + E
+                   | E + menos + E
+                   | E + por + E
+                   | E + div + E
+                   | numero;
+            #endregion
+
+            #region Preferencias
+            this.Root = INICIO;
             #endregion
 
         }

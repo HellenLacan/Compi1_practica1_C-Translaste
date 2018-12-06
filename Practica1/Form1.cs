@@ -1,4 +1,5 @@
-﻿using Practica1.sol.com.window;
+﻿using Practica1.sol.com.analyzer;
+using Practica1.sol.com.window;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -136,6 +137,21 @@ namespace Practica1
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void traducirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Syntactic mySyntactic = new Syntactic();
+            bool resultado = mySyntactic.analyze(getRichTextBox().Text);
+
+            if (resultado == true)
+            {
+                Console.WriteLine("Analisis Correcto");
+            }
+            else {
+                Console.WriteLine("Analisis incorrecto");
+
+            }
         }
     }
 }

@@ -13,7 +13,10 @@ namespace Practica1.sol.com.analizador
         public Grammar(): base(caseSensitive:true) {
 
             #region ER
-            RegexBasedTerminal numero = new RegexBasedTerminal("numero", "[0-9]+");
+            RegexBasedTerminal numero = new RegexBasedTerminal("numeroDecimal", "[0-9]+");
+            RegexBasedTerminal numeroDecimal = new RegexBasedTerminal("numeroDecimal", "[0-9]+[.][0-9]+");
+            IdentifierTerminal id = new IdentifierTerminal("id");
+            StringLiteral cadena = new StringLiteral("cadena", "\"", StringOptions.IsTemplate);
             #endregion
 
             #region Terminales
@@ -41,6 +44,10 @@ namespace Practica1.sol.com.analizador
             var or = ToTerm("||");
             var negacion = ToTerm("!");
             var dosPtos = ToTerm(":");
+            #endregion
+
+            #region PalabrasReservadas
+
             #endregion
 
         }

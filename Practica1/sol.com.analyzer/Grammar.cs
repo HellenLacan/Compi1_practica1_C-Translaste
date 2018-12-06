@@ -47,7 +47,36 @@ namespace Practica1.sol.com.analizador
             #endregion
 
             #region PalabrasReservadas
-
+            KeyTerm _conteiner = ToTerm("Conteiner");
+            KeyTerm _public = ToTerm("Pub");
+            KeyTerm _private = ToTerm("Pri");
+            KeyTerm _protected = ToTerm("Pro");
+            KeyTerm _bool = ToTerm("Bool");
+            KeyTerm _decimal = ToTerm("Dec");
+            KeyTerm _numero = ToTerm("Num");
+            KeyTerm _str = ToTerm("Str");
+            KeyTerm _prop = ToTerm("prop");
+            KeyTerm _return = ToTerm("ret");
+            KeyTerm _sif = ToTerm("sif");
+            KeyTerm _sifnot = ToTerm("sifnot");
+            KeyTerm _trus = ToTerm("sifnot");
+            KeyTerm _fals = ToTerm("sifnot");
+            KeyTerm _or = ToTerm("or");
+            KeyTerm _and = ToTerm("and");
+            KeyTerm _not = ToTerm("not");
+            KeyTerm _whs = ToTerm("whs");
+            KeyTerm _hc = ToTerm("hc");
+            KeyTerm _mayor = ToTerm("Gt");
+            KeyTerm _mayorQ = ToTerm("Gte");
+            KeyTerm _equivalente = ToTerm("Eq");
+            KeyTerm _distinto = ToTerm("Eqs");
+            KeyTerm _menor = ToTerm("Lt");
+            KeyTerm _menorQ = ToTerm("Lte");
+            KeyTerm _break = ToTerm("brk");
+            KeyTerm _print = ToTerm("print");
+            KeyTerm _case = ToTerm("cas");
+            KeyTerm _default = ToTerm("def");
+            KeyTerm _select = ToTerm("select");
             #endregion
 
         }

@@ -38,7 +38,7 @@ namespace Practica1.sol.com.window{
             private set { this._path = value; }
         }
 
-        public void openFile() {
+        public void openFile(String a="s") {
 
             
         }

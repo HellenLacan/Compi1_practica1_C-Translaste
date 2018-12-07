@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 using Irony.Ast;
 using Irony.Parsing;
 
+/*
+ Listas sin simbolo de separacion
+              palabras.Rule = MakePlusRule(palabras, palabra);             
+              Reconoce: palabra palabra1 palabra2  palabra3
+
+Listas con simbolo de separacion
+
+            l_ids.Rule = this.MakeListRule(l_ids, ToTerm(","), ID);
+            Reconoce: id, id, id , id
+*/
+
 namespace Practica1.sol.com.analizador
 {
     class Gramatica : Grammar
@@ -39,10 +50,10 @@ namespace Practica1.sol.com.analizador
             //var menorQ = ToTerm("<=");
             //var mayorQ = ToTerm(">=");
             //var igual = ToTerm("==");
-            var distinto = ToTerm("!=");
-            var and = ToTerm("&&");
-            var or = ToTerm("||");
-            var negacion = ToTerm("!");
+            //var distinto = ToTerm("!=");
+            //var and = ToTerm("&&");
+            //var or = ToTerm("||");
+            //var negacion = ToTerm("!");
             var dosPtos = ToTerm(":");
             #endregion
 
@@ -92,7 +103,11 @@ namespace Practica1.sol.com.analizador
             NonTerminal LISTA_SENTENCIAS = new NonTerminal("LISTA_SENTENCIAS");
             NonTerminal VISIBILIDAD = new NonTerminal("VISIBILIDAD");
             NonTerminal VARIABLES_GLOBALES = new NonTerminal("VARIABLES_GLOBALES");
+            NonTerminal CONSTRUCTOR = new NonTerminal("CONSTRUCTOR");
             NonTerminal TIPO = new NonTerminal("TIPO");
+            NonTerminal LISTA_PARAMETROS = new NonTerminal("LISTA_PARAMETROS");
+            NonTerminal PARAMETROS = new NonTerminal("PARAMETROS");
+
             #endregion
 
             #region Gramatica
@@ -103,9 +118,11 @@ namespace Practica1.sol.com.analizador
                                |CLASE
                                |VARIABLES_GLOBALES;
 
-            CLASE.Rule = _conteiner + identificador + corcheteAb + corcheteCerr;
+            CLASE.Rule = _conteiner + identificador + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
 
             LISTA_SENTENCIAS.Rule = LISTA_SENTENCIAS + VARIABLES_GLOBALES
+                                   |LISTA_SENTENCIAS + CONSTRUCTOR
+                                   |CONSTRUCTOR
                                    |VARIABLES_GLOBALES
                                    |Empty;
 
@@ -115,7 +132,16 @@ namespace Practica1.sol.com.analizador
                                  |Empty;
 
             TIPO_ASIGN_VAR.Rule = EXPR
-                                 |CONDICION;
+                                 |CONDICION
+                                 | _new +  identificador + parentesisAb + parentesisCerr;
+
+            CONSTRUCTOR.Rule = identificador + parentesisAb + LISTA_PARAMETROS +parentesisCerr + dosPtos + _public + corcheteAb + corcheteCerr;
+
+            LISTA_PARAMETROS.Rule = LISTA_PARAMETROS + coma + PARAMETROS
+                                   |PARAMETROS;
+
+            PARAMETROS.Rule = TIPO + identificador
+                             |Empty;
 
             VISIBILIDAD.Rule = _public
                               | _private
@@ -137,6 +163,8 @@ namespace Practica1.sol.com.analizador
                    | numeroDecimal
                    | identificador
                    | cadena
+                   | _trus
+                   | _fals
                    | menos + EXPR
                    | mas + EXPR;
 

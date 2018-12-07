@@ -72,7 +72,7 @@ namespace Practica1
 
             RichTextBox newTextBox = new RichTextBox();
             newTextBox.Dock = DockStyle.Fill;
-            newTextBox.Font = new Font("Verdana", 12);
+            newTextBox.Font = new Font("Verdana", 10);
             newTextBox.BackColor = Color.White;
             newTextBox.BorderStyle = BorderStyle.None;
             

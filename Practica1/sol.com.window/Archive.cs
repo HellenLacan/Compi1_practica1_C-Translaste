@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Practica1.sol.com.window{
-
     class Archive{
 
         public String _content;

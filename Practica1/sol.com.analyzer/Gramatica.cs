@@ -89,7 +89,7 @@ namespace Practica1.sol.com.analizador
             KeyTerm _default = ToTerm("def");
             KeyTerm _select = ToTerm("select");
             KeyTerm _new = ToTerm("inst");
-
+            KeyTerm _vac = ToTerm("vac");
             #endregion
 
             #region No Terminales
@@ -106,7 +106,11 @@ namespace Practica1.sol.com.analizador
             NonTerminal CONSTRUCTOR = new NonTerminal("CONSTRUCTOR");
             NonTerminal TIPO = new NonTerminal("TIPO");
             NonTerminal LISTA_PARAMETROS = new NonTerminal("LISTA_PARAMETROS");
+            NonTerminal LISTA_VARS = new NonTerminal("LISTA_VARS");
+            NonTerminal VARS = new NonTerminal("VARS");
             NonTerminal PARAMETROS = new NonTerminal("PARAMETROS");
+            NonTerminal METODOS = new NonTerminal("METODOS");
+
 
             #endregion
 
@@ -114,17 +118,17 @@ namespace Practica1.sol.com.analizador
             INICIO.Rule = LISTA_CLASES;
 
             LISTA_CLASES.Rule = LISTA_CLASES + CLASE
-                               |LISTA_CLASES + VARIABLES_GLOBALES
-                               |CLASE
-                               |VARIABLES_GLOBALES;
+                               | CLASE;
 
             CLASE.Rule = _conteiner + identificador + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
 
             LISTA_SENTENCIAS.Rule = LISTA_SENTENCIAS + VARIABLES_GLOBALES
                                    |LISTA_SENTENCIAS + CONSTRUCTOR
+                                   |LISTA_SENTENCIAS + METODOS
                                    |CONSTRUCTOR
                                    |VARIABLES_GLOBALES
-                                   |Empty;
+                                   |METODOS
+                                   | Empty;
 
             VARIABLES_GLOBALES.Rule = VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR + ptoYComa;
 
@@ -133,15 +137,27 @@ namespace Practica1.sol.com.analizador
 
             TIPO_ASIGN_VAR.Rule = EXPR
                                  |CONDICION
-                                 | _new +  identificador + parentesisAb + parentesisCerr;
+                                 | _new +  identificador + parentesisAb + LISTA_VARS + parentesisCerr;
+
+            LISTA_VARS.Rule = LISTA_VARS + coma + VARS
+                             | VARS;
+
+            VARS.Rule = identificador
+                        |cadena
+                        |EXPR
+                        |numero
+                        |numeroDecimal
+                        |_trus
+                        |_fals
+                        |Empty;
 
             CONSTRUCTOR.Rule = identificador + parentesisAb + LISTA_PARAMETROS +parentesisCerr + dosPtos + _public + corcheteAb + corcheteCerr;
 
-            LISTA_PARAMETROS.Rule = LISTA_PARAMETROS + coma + PARAMETROS
-                                   |PARAMETROS;
+            LISTA_PARAMETROS.Rule = LISTA_PARAMETROS + coma + TIPO + identificador
+                                   | TIPO + identificador
+                                   | Empty;
 
-            PARAMETROS.Rule = TIPO + identificador
-                             |Empty;
+            METODOS.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + TIPO + corcheteAb + corcheteCerr;
 
             VISIBILIDAD.Rule = _public
                               | _private

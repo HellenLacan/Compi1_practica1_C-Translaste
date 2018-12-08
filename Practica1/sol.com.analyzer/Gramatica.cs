@@ -128,7 +128,7 @@ namespace Practica1.sol.com.analizador
                                    |CONSTRUCTOR
                                    |VARIABLES_GLOBALES
                                    |METODOS
-                                   | Empty;
+                                   |Empty;
 
             VARIABLES_GLOBALES.Rule = VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR + ptoYComa;
 
@@ -198,6 +198,9 @@ namespace Practica1.sol.com.analizador
             #region Preferencias
             this.Root = INICIO;
             #endregion
+
+            MarkPunctuation(corcheteAb, corcheteCerr);
+
 
         }
     }

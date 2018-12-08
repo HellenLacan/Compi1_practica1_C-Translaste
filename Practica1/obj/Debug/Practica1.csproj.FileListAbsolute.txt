@@ -13,3 +13,5 @@ C:\Users\Hellen\Documents\Cursos\COMPI1_VACAS_DIC_2018\Practica1\Practica1\obj\D
 C:\Users\Hellen\Documents\Cursos\COMPI1_VACAS_DIC_2018\Practica1\Practica1\obj\Debug\Practica1.Form1.resources
 C:\Users\Hellen\Documents\Cursos\COMPI1_VACAS_DIC_2018\Practica1\Practica1\bin\Debug\Irony.Interpreter.dll
 C:\Users\Hellen\Documents\Cursos\COMPI1_VACAS_DIC_2018\Practica1\Practica1\bin\Debug\Irony.Interpreter.pdb
+C:\Users\Hellen\Documents\Cursos\COMPI1_VACAS_DIC_2018\Practica1\Practica1\obj\Debug\Interop.WINGRAPHVIZLib.dll
+C:\Users\Hellen\Documents\Cursos\COMPI1_VACAS_DIC_2018\Practica1\Practica1\obj\Debug\Practica1.csproj.ResolveComReference.cache

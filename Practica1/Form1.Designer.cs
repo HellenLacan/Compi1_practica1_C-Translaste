@@ -37,6 +37,7 @@
             this.cToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.traducirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +48,7 @@
             this.traducirToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1115, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1180, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -113,11 +114,20 @@
             this.tabControl1.Size = new System.Drawing.Size(563, 568);
             this.tabControl1.TabIndex = 1;
             // 
+            // tabControl2
+            // 
+            this.tabControl2.Location = new System.Drawing.Point(611, 31);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(536, 568);
+            this.tabControl2.TabIndex = 2;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1115, 611);
+            this.ClientSize = new System.Drawing.Size(1180, 611);
+            this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -142,6 +152,7 @@
         private System.Windows.Forms.ToolStripMenuItem cToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.ToolStripMenuItem traducirToolStripMenuItem;
+        private System.Windows.Forms.TabControl tabControl2;
     }
 }
 

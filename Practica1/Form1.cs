@@ -1,4 +1,5 @@
-﻿using Practica1.sol.com.analyzer;
+﻿using Irony.Parsing;
+using Practica1.sol.com.analyzer;
 using Practica1.sol.com.window;
 using System;
 using System.Collections.Generic;
@@ -61,12 +62,11 @@ namespace Practica1
                 getRichTextBox().Text = content;
             }
         }
-
-   
-
-   
+        
+    //CREAR PESTAÑA NUEVA
         private void newTab_Click(object sender, EventArgs e)
         {
+            //TABPANEL1
             TabPage newTabPage = new TabPage("New Document");
             newTabPage.Font = new Font("Verdana", 18);
 
@@ -75,10 +75,22 @@ namespace Practica1
             newTextBox.Font = new Font("Verdana", 10);
             newTextBox.BackColor = Color.White;
             newTextBox.BorderStyle = BorderStyle.None;
-            
 
             newTabPage.Controls.Add(newTextBox);
             tabControl1.TabPages.Add(newTabPage);
+
+            //TABPANEL2
+            TabPage newTabPage2 = new TabPage("New Document");
+            newTabPage2.Font = new Font("Verdana", 18);
+
+            RichTextBox newTextBox2 = new RichTextBox();
+            newTextBox2.Dock = DockStyle.Fill;
+            newTextBox2.Font = new Font("Verdana", 10);
+            newTextBox2.BackColor = Color.White;
+            newTextBox2.BorderStyle = BorderStyle.None;
+
+            newTabPage2.Controls.Add(newTextBox2);
+            tabControl2.TabPages.Add(newTabPage2);
         }
 
         private void saveAs_Click(object sender, EventArgs e)
@@ -98,6 +110,7 @@ namespace Practica1
         private RichTextBox getRichTextBox() {
             RichTextBox richTextBox = null;
             TabPage tp = tabControl1.SelectedTab;
+            var tab = tabControl1.SelectedTab;
 
             if (tp != null) {
                 richTextBox = tp.Controls[0] as RichTextBox;
@@ -105,35 +118,7 @@ namespace Practica1
 
             return richTextBox;
         }
-
-        private void updateNumberLabel()
-        {
-            //we get index of first visible char and 
-            //number of first visible line
-            Point pos = new Point(0, 0);
-            int firstIndex = getRichTextBox().GetCharIndexFromPosition(pos);
-            int firstLine = getRichTextBox().GetLineFromCharIndex(firstIndex);
-
-            //now we get index of last visible char 
-            //and number of last visible line
-            pos.X = ClientRectangle.Width;
-            pos.Y = ClientRectangle.Height;
-            int lastIndex = getRichTextBox().GetCharIndexFromPosition(pos);
-            int lastLine = getRichTextBox().GetLineFromCharIndex(lastIndex);
-
-            //this is point position of last visible char, we'll 
-            //use its Y value for calculating numberLabel size
-            pos = getRichTextBox().GetPositionFromCharIndex(lastIndex);
-
-            //finally, renumber label
-            //numberLabel.Text = "";
-            for (int i = firstLine; i <= lastLine + 1; i++)
-            {
-              //  numberLabel.Text += i + 1 + "\n";
-            }
-
-        }
-
+        
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -142,11 +127,14 @@ namespace Practica1
         private void traducirToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Syntactic mySyntactic = new Syntactic();
-            bool resultado = mySyntactic.analyze(getRichTextBox().Text);
+            //bool resultado = mySyntactic.analyze(getRichTextBox().Text);
+            ParseTreeNode resultado = mySyntactic.analyze(getRichTextBox().Text);
 
-            if (resultado == true)
+            if (resultado != null)
             {
                 Console.WriteLine("Analisis Correcto");
+                Recorrido.traducir(resultado);
+                Syntactic.generarImagen(resultado);
             }
             else {
                 Console.WriteLine("Analisis incorrecto");

@@ -17,6 +17,10 @@ namespace Practica1.sol.com.window{
         {
         }
 
+        public Archive(String name)
+        {
+        }
+
         public Archive(String content, String path) {
             this._content = content;
             this._path = path;

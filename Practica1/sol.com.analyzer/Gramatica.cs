@@ -110,8 +110,7 @@ namespace Practica1.sol.com.analizador
             NonTerminal VARS = new NonTerminal("VARS");
             NonTerminal PARAMETROS = new NonTerminal("PARAMETROS");
             NonTerminal METODOS = new NonTerminal("METODOS");
-
-
+            
             #endregion
 
             #region Gramatica
@@ -139,16 +138,10 @@ namespace Practica1.sol.com.analizador
                                  |CONDICION
                                  | _new +  identificador + parentesisAb + LISTA_VARS + parentesisCerr;
 
-            LISTA_VARS.Rule = LISTA_VARS + coma + VARS
+            LISTA_VARS.Rule = LISTA_VARS + coma + EXPR
                              | VARS;
 
-            VARS.Rule = identificador
-                        |cadena
-                        |EXPR
-                        |numero
-                        |numeroDecimal
-                        |_trus
-                        |_fals
+            VARS.Rule = EXPR
                         |Empty;
 
             CONSTRUCTOR.Rule = identificador + parentesisAb + LISTA_PARAMETROS +parentesisCerr + dosPtos + _public + corcheteAb + corcheteCerr;
@@ -199,7 +192,7 @@ namespace Practica1.sol.com.analizador
             this.Root = INICIO;
             #endregion
 
-            MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa);
+            MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa, coma);
 
 
         }

@@ -121,7 +121,6 @@ namespace Practica1
         
         private void Form1_Load(object sender, EventArgs e)
         {
-
         }
 
         private void traducirToolStripMenuItem_Click(object sender, EventArgs e)

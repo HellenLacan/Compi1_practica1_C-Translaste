@@ -79,18 +79,18 @@ namespace Practica1
             newTabPage.Controls.Add(newTextBox);
             tabControl1.TabPages.Add(newTabPage);
 
-            //TABPANEL2
-            TabPage newTabPage2 = new TabPage("New Document");
-            newTabPage2.Font = new Font("Verdana", 18);
+            ////TABPANEL2
+            //TabPage newTabPage2 = new TabPage("New Document");
+            //newTabPage2.Font = new Font("Verdana", 18);
 
-            RichTextBox newTextBox2 = new RichTextBox();
-            newTextBox2.Dock = DockStyle.Fill;
-            newTextBox2.Font = new Font("Verdana", 10);
-            newTextBox2.BackColor = Color.White;
-            newTextBox2.BorderStyle = BorderStyle.None;
+            //RichTextBox newTextBox2 = new RichTextBox();
+            //newTextBox2.Dock = DockStyle.Fill;
+            //newTextBox2.Font = new Font("Verdana", 10);
+            //newTextBox2.BackColor = Color.White;
+            //newTextBox2.BorderStyle = BorderStyle.None;
 
-            newTabPage2.Controls.Add(newTextBox2);
-            tabControl2.TabPages.Add(newTabPage2);
+            //newTabPage2.Controls.Add(newTextBox2);
+            //tabControl2.TabPages.Add(newTabPage2);
         }
 
         private void saveAs_Click(object sender, EventArgs e)
@@ -132,6 +132,9 @@ namespace Practica1
             if (resultado != null)
             {
                 Console.WriteLine("Analisis Correcto");
+                String text = "";
+                String lenguaje = (Recorrido.recorrerAST(resultado.ChildNodes.ElementAt(0), text));
+                richTextBoxTraducido.Text = lenguaje;
                 Recorrido.traducir(resultado);
                 Syntactic.generarImagen(resultado);
             }
@@ -139,6 +142,11 @@ namespace Practica1
                 Console.WriteLine("Analisis incorrecto");
 
             }
+        }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
     }
 }

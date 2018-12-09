@@ -13,7 +13,7 @@ namespace Practica1.sol.com.analyzer
         public static void traducir(ParseTreeNode root) {
             String lenguajeCS="";
             String tot = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
-            MessageBox.Show(tot);
+            //MessageBox.Show(tot);
         }
 
         public static String recorrerAST(ParseTreeNode root, String lenguajeCS) {
@@ -137,7 +137,8 @@ namespace Practica1.sol.com.analyzer
                             return "Boolean";
 
                         case "identificador":
-                            return root.ChildNodes.ElementAt(0).Term.Name;
+                            String[] idExp = root.ChildNodes.ElementAt(0).ToString().Split(' ');
+                            return idExp[0];
 
                     }
 
@@ -187,7 +188,8 @@ namespace Practica1.sol.com.analyzer
 
                             if (root.ChildNodes.ElementAt(0).Term.Name == "cadena") {
                                 hoja = "\"" + cadena[0] + "\"";
-                            } else if (root.ChildNodes.ElementAt(0).Term.Name == "numero" | root.ChildNodes.ElementAt(0).Term.Name == "numeroDecimal") {
+                            } else if (root.ChildNodes.ElementAt(0).Term.Name == "numero" | root.ChildNodes.ElementAt(0).Term.Name == "numeroDecimal" |
+                                       root.ChildNodes.ElementAt(0).Term.Name == "identificador") {
                                 hoja = numero[0];
                             }
                             return (hoja);
@@ -333,8 +335,33 @@ namespace Practica1.sol.com.analyzer
                     }
 
                 case "CONSTRUCTOR":
+                    String constructor="";
+                    String[] nombreConstructor = (root.ChildNodes.ElementAt(0)).ToString().Split(' ');
+                    String paramConstructor = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
 
-                    return "";
+                    constructor = "\n\n\tpublic " + nombreConstructor[0] + "(" + paramConstructor +"){" + "" + "\n\t}";
+
+                    return constructor;
+
+                case "LISTA_PARAMETROS":
+                    String tipoVarPar = "";
+                    String listaParams="";
+                    switch (root.ChildNodes.Count) {
+
+                        case 0:
+                            return "";
+
+                        case 2:
+                            tipoVarPar = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                            String[] nombreVar = root.ChildNodes.ElementAt(1).ToString().Split(' ');
+                            return tipoVarPar + " " + nombreVar[0];
+                        case 3:
+                            listaParams =  recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS) + ", ";
+                            tipoVarPar = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                            String[] nombreVarLista = root.ChildNodes.ElementAt(2).ToString().Split(' ');
+                            return listaParams + tipoVarPar + " "+nombreVarLista[0];
+                    }
+                    return ":";
 
             }
 

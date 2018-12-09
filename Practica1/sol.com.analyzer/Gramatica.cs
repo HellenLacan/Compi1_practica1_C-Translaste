@@ -192,7 +192,7 @@ namespace Practica1.sol.com.analizador
             this.Root = INICIO;
             #endregion
 
-            MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa, coma);
+            MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa, coma, dosPtos);
 
 
         }

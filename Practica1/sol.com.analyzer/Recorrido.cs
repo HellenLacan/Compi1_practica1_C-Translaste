@@ -16,6 +16,8 @@ namespace Practica1.sol.com.analyzer
             //MessageBox.Show(tot);
         }
 
+ 
+
         public static String recorrerAST(ParseTreeNode root, String lenguajeCS) {
 
             switch (root.Term.Name) {
@@ -57,7 +59,10 @@ namespace Practica1.sol.com.analyzer
                                     return recorrerAST(root.ChildNodes.ElementAt(0),lenguajeCS);
 
                                 case "METODOS":
-                                    break;
+                                    return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+
+                                case "FUNCIONES":
+                                    return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
 
                             }
 
@@ -72,38 +77,49 @@ namespace Practica1.sol.com.analyzer
                     break;
 
                 case "VARIABLES_GLOBALES":
-                    /*
-                                           VARIABLES_GLOBALES
-                                     /       |         |             \
-                             VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR;
-                    */
                     String visibilidad = "";
                     String tipo = "";
                     String expresion = "";
 
-                    //Reconoce visibilidad
-                    if (root.ChildNodes.ElementAt(0).ChildNodes.Count == 1){
-                        visibilidad = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                    switch (root.ChildNodes.Count) {
+
+                        case 4:
+                            /*
+                                           VARIABLES_GLOBALES
+                                     /       |         |             \
+                             VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR;
+                            */
+
+                            //Reconoce visibilidad
+                            if (root.ChildNodes.ElementAt(0).ChildNodes.Count == 1)
+                            {
+                                visibilidad = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                            }
+
+                            //Reconoce tipo
+                            tipo = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                            String[] idVar = (root.ChildNodes.ElementAt(2).ToString()).Split(' ');
+
+                            //Reconoce Expresion
+                            expresion = recorrerAST(root.ChildNodes.ElementAt(3), lenguajeCS);
+
+                            return  "\n\t" + visibilidad + " " + tipo + " " + idVar[0] + expresion + ";";
+                           
+
+                        case 3:
+                          
+                            //Reconoce tipo
+                            tipo = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                            String[] idVarSt = (root.ChildNodes.ElementAt(1).ToString()).Split(' ');
+
+                            //Reconoce Expresion
+                            expresion = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
+
+                            return  "\n\t " + tipo + " " + idVarSt[0] + expresion + ";";
                     }
 
-                    //Reconoce tipo
-                    tipo = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
-                    String[] idVar = (root.ChildNodes.ElementAt(2).ToString()).Split(' ');
-
-                    //Reconoce Expresion
-                    expresion = recorrerAST(root.ChildNodes.ElementAt(3), lenguajeCS);
-
-                    String var = "";
-                    if (visibilidad != "")
-                    {
-                        var = "\n\t" + visibilidad + " " + tipo + " " + idVar[0] + expresion +";";
-                    }
-                    else {
-                        var = "\n\t " + tipo + " " + idVar[0] + expresion + ";";
-                    }
-
-                    return var;
-
+                    break;
+                    
                 case "VISIBILIDAD":
 
                     switch (root.ChildNodes.ElementAt(0).Term.Name) {
@@ -120,6 +136,9 @@ namespace Practica1.sol.com.analyzer
                     }
 
                     break;
+
+                case "VISIBILIDAD_OPC":
+                    return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
 
                 case "TIPO":
 
@@ -361,7 +380,24 @@ namespace Practica1.sol.com.analyzer
                             String[] nombreVarLista = root.ChildNodes.ElementAt(2).ToString().Split(' ');
                             return listaParams + tipoVarPar + " "+nombreVarLista[0];
                     }
-                    return ":";
+                    break;
+
+                case "METODOS":
+                    String visibilidadMetodo = recorrerAST(root.ChildNodes.ElementAt(0),lenguajeCS);
+                    String[] nombreMetodo = root.ChildNodes.ElementAt(1).ToString().Split(' ');
+                    String listaParametros = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
+
+                    return "\n\n\t" + visibilidadMetodo + " void " + nombreMetodo[0]+ "(" + listaParametros + "){" + "\n\n\t}";
+
+                case "FUNCIONES":
+
+                    String visibilidadFuncion = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                    String[] nombreFuncion = root.ChildNodes.ElementAt(1).ToString().Split(' ');
+                    String listaParametrosFuncion = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
+                    String tipoFuncion = recorrerAST(root.ChildNodes.ElementAt(3), lenguajeCS);
+                    
+                    return "\n\n\t" + visibilidadFuncion +" "+ tipoFuncion + " " +nombreFuncion[0] + "(" + listaParametrosFuncion + "){" + "\n\n\t}";
+
 
             }
 

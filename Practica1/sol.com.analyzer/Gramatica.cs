@@ -45,15 +45,6 @@ namespace Practica1.sol.com.analizador
             var menos = ToTerm("-");
             var por = ToTerm("*");
             var div = ToTerm("/");
-            //var menor = ToTerm("<");
-            //var mayor = ToTerm(">");
-            //var menorQ = ToTerm("<=");
-            //var mayorQ = ToTerm(">=");
-            //var igual = ToTerm("==");
-            //var distinto = ToTerm("!=");
-            //var and = ToTerm("&&");
-            //var or = ToTerm("||");
-            //var negacion = ToTerm("!");
             var dosPtos = ToTerm(":");
             #endregion
 
@@ -102,6 +93,7 @@ namespace Practica1.sol.com.analizador
             NonTerminal LISTA_CLASES = new NonTerminal("LISTA_CLASES");
             NonTerminal LISTA_SENTENCIAS = new NonTerminal("LISTA_SENTENCIAS");
             NonTerminal VISIBILIDAD = new NonTerminal("VISIBILIDAD");
+            NonTerminal VISIBILIDAD_OPC = new NonTerminal("VISIBILIDAD_OPC");
             NonTerminal VARIABLES_GLOBALES = new NonTerminal("VARIABLES_GLOBALES");
             NonTerminal CONSTRUCTOR = new NonTerminal("CONSTRUCTOR");
             NonTerminal TIPO = new NonTerminal("TIPO");
@@ -110,7 +102,10 @@ namespace Practica1.sol.com.analizador
             NonTerminal VARS = new NonTerminal("VARS");
             NonTerminal PARAMETROS = new NonTerminal("PARAMETROS");
             NonTerminal METODOS = new NonTerminal("METODOS");
-            
+            NonTerminal FUNCIONES = new NonTerminal("FUNCIONES");
+            NonTerminal VARIABLES_LOCALES = new NonTerminal("VARIABLES_LOCALES");
+
+
             #endregion
 
             #region Gramatica
@@ -124,12 +119,17 @@ namespace Practica1.sol.com.analizador
             LISTA_SENTENCIAS.Rule = LISTA_SENTENCIAS + VARIABLES_GLOBALES
                                    |LISTA_SENTENCIAS + CONSTRUCTOR
                                    |LISTA_SENTENCIAS + METODOS
+                                   |LISTA_SENTENCIAS + FUNCIONES
                                    |CONSTRUCTOR
                                    |VARIABLES_GLOBALES
                                    |METODOS
+                                   |FUNCIONES
                                    |Empty;
 
-            VARIABLES_GLOBALES.Rule = VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR + ptoYComa;
+            VARIABLES_GLOBALES.Rule = VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR + ptoYComa
+                                     |TIPO + identificador + ASIGNACION_VAR + ptoYComa;
+
+//            VARIABLES_LOCALES.Rule = TIPO + identificador + ASIGNACION_VAR + ptoYComa;
 
             ASIGNACION_VAR.Rule = asignacion + TIPO_ASIGN_VAR
                                  |Empty;
@@ -150,12 +150,13 @@ namespace Practica1.sol.com.analizador
                                    | TIPO + identificador
                                    | Empty;
 
-            METODOS.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + TIPO + corcheteAb + corcheteCerr;
+            METODOS.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + _vac + corcheteAb + corcheteCerr;
+
+            FUNCIONES.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + TIPO + corcheteAb + corcheteCerr;
 
             VISIBILIDAD.Rule = _public
                               | _private
-                              | _protected
-                              |Empty;
+                              | _protected  ;
 
             TIPO.Rule = _str
                        | _num
@@ -192,7 +193,8 @@ namespace Practica1.sol.com.analizador
             this.Root = INICIO;
             #endregion
 
-            MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa, coma, dosPtos);
+            MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa, coma, dosPtos,
+                            _vac);
 
 
         }

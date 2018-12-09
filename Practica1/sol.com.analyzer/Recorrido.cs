@@ -34,9 +34,9 @@ namespace Practica1.sol.com.analyzer
 
                 case "CLASE":
                     /*
-                                       clase
+                                       CLASE
                                      /   |   \
-                             conteiner  id   lista_sentencias
+                             conteiner  id   LISTA_SENTENCIAS
                     */
                     String[] idClass = (root.ChildNodes.ElementAt(1).ToString()).Split(' ');
                     lenguajeCS += "\nclass " + idClass[0] + "{";
@@ -72,18 +72,36 @@ namespace Practica1.sol.com.analyzer
                     break;
 
                 case "VARIABLES_GLOBALES":
-
+                    /*
+                                           VARIABLES_GLOBALES
+                                     /       |         |             \
+                             VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR;
+                    */
                     String visibilidad = "";
                     String tipo = "";
-                    
+                    String expresion = "";
+
+                    //Reconoce visibilidad
                     if (root.ChildNodes.ElementAt(0).ChildNodes.Count == 1){
-                        visibilidad = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS); ;
+                        visibilidad = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
                     }
 
+                    //Reconoce tipo
                     tipo = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
                     String[] idVar = (root.ChildNodes.ElementAt(2).ToString()).Split(' ');
 
-                    String var = "\n\t" + visibilidad + " " + tipo + " " + idVar[0] + ";";
+                    //Reconoce Expresion
+                    expresion = recorrerAST(root.ChildNodes.ElementAt(3), lenguajeCS);
+
+                    String var = "";
+                    if (visibilidad != "")
+                    {
+                        var = "\n\t" + visibilidad + " " + tipo + " " + idVar[0] + expresion +";";
+                    }
+                    else {
+                        var = "\n\t " + tipo + " " + idVar[0] + expresion + ";";
+                    }
+
                     return var;
 
                 case "VISIBILIDAD":
@@ -124,6 +142,93 @@ namespace Practica1.sol.com.analyzer
                     }
 
                     break;
+
+                case "ASIGNACION_VAR":
+
+                    switch (root.ChildNodes.Count) {
+                        case 1:
+                            return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS); ;
+
+                    }
+
+                    break;
+                case "TIPO_ASIGN_VAR":
+
+                    switch (root.ChildNodes.ElementAt(0).Term.Name) {
+
+                        case "EXPR":
+                            return " = " + recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+
+                        case "CONDICION":
+                            break;
+
+                        default:
+                            String[] id_tipoAsingVar = (root.ChildNodes.ElementAt(1).ToString()).Split();
+                            return " = new " + id_tipoAsingVar[0] +"()";
+                    }
+
+                    break;
+
+                case "EXPR":
+                    String hoja = "";
+                    switch (root.ChildNodes.Count) {
+                        case 1:
+                            hoja = root.ChildNodes.ElementAt(0).ToString();
+
+                            if (hoja == "EXPR")
+                            {
+                                String[] hojaE = (recorrerAST(root.ChildNodes.ElementAt(0),lenguajeCS)).ToString().Split(' ');
+                                return "(" + hojaE[0] + ")"; ;
+                            }
+
+                            return (hoja);
+                            
+                        case 2:
+                            break;
+
+                        case 3:
+
+                            String[] n1 = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS).Split(' ');
+                            String[] n2 = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS).Split(' ');
+                            String[] signo = (root.ChildNodes.ElementAt(1).ToString()).Split(' ') ;
+
+                            if (n1[0] == "EXPRESION")
+                            {
+                                String[] a1 = (root.ChildNodes.ElementAt(0).ChildNodes.ElementAt(0).ToString()).Split(' ') ;
+                                Console.WriteLine(a1[0]);
+
+                            }
+                            else {
+                                switch (signo[0])
+                                {
+
+                                    case "+":
+                                        return (n1[0] + "+" + n2[0]);
+
+                                    case "-":
+                                        return (n1[0] + "-" + n2[0]);
+
+
+                                    case "*":
+                                        return (n1[0] + "*" + n2[0]);
+
+
+                                    case "/":
+                                        return (n1[0] + "/" + n2[0]);
+
+                                    default:
+                                        return (n1[0] + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS) + n2[0]);
+
+                                }
+
+                            }
+
+                            break;
+                    }
+
+                    break;
+
+
             }
 
             return lenguajeCS;

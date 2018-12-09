@@ -38,16 +38,19 @@ namespace Practica1.sol.com.analyzer
                     /*
                                        CLASE
                                      /   |   \
-                             conteiner  id   LISTA_SENTENCIAS
+                             conteiner  id   SENTENCIAS_DE_CLASE
                     */
                     String[] idClass = (root.ChildNodes.ElementAt(1).ToString()).Split(' ');
                     lenguajeCS += "\nclass " + idClass[0] + "{";
-                    String hijo3_C = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS); //HIJO 3 DE CLASE (LISTA_SENTENCIAS)
-                    lenguajeCS += hijo3_C + "\n}";
+                    String hijo3_C = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS); //HIJO 3 DE CLASE (SENTENCIAS_DE_CLASE)
+                    lenguajeCS += hijo3_C + "\n\n}";
                     break;
 
-                case "LISTA_SENTENCIAS":
+                case "SENTENCIAS_DE_CLASE":
                     switch (root.ChildNodes.Count) {
+
+                        case 0:
+                            return "";
                         case 1:
 
                             switch (root.ChildNodes.ElementAt(0).Term.Name) {
@@ -181,7 +184,7 @@ namespace Practica1.sol.com.analyzer
                         case "EXPR":
                             return " = " + recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
 
-                        case "CONDICION":
+                        case "CONDICION_COMPARACION":
                             return " = " + recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
 
                         default:
@@ -251,14 +254,14 @@ namespace Practica1.sol.com.analyzer
 
                     break;
 
-                case "CONDICION":
+                case "CONDICION_COMPARACION":
                     String hojaC = "";
                     switch (root.ChildNodes.Count)
                     {
                         case 1:
                             hojaC = root.ChildNodes.ElementAt(0).ToString();
 
-                            if (hojaC == "CONDICION")
+                            if (hojaC == "CONDICION_COMPARACION")
                             {
                                 String hojaE = (recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS));
                                 return "(" + hojaE + ")"; ;
@@ -386,8 +389,9 @@ namespace Practica1.sol.com.analyzer
                     String visibilidadMetodo = recorrerAST(root.ChildNodes.ElementAt(0),lenguajeCS);
                     String[] nombreMetodo = root.ChildNodes.ElementAt(1).ToString().Split(' ');
                     String listaParametros = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
+                    String sentenciaMetodos = recorrerAST(root.ChildNodes.ElementAt(3), lenguajeCS);
 
-                    return "\n\n\t" + visibilidadMetodo + " void " + nombreMetodo[0]+ "(" + listaParametros + "){" + "\n\n\t}";
+                    return "\n\n\t" + visibilidadMetodo + " void " + nombreMetodo[0]+ "(" + listaParametros + "){\n\n\t" + sentenciaMetodos+ "\n\n\t}";
 
                 case "FUNCIONES":
 
@@ -395,8 +399,9 @@ namespace Practica1.sol.com.analyzer
                     String[] nombreFuncion = root.ChildNodes.ElementAt(1).ToString().Split(' ');
                     String listaParametrosFuncion = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
                     String tipoFuncion = recorrerAST(root.ChildNodes.ElementAt(3), lenguajeCS);
-                    
-                    return "\n\n\t" + visibilidadFuncion +" "+ tipoFuncion + " " +nombreFuncion[0] + "(" + listaParametrosFuncion + "){" + "\n\n\t}";
+                    String sentenciaFunciones = recorrerAST(root.ChildNodes.ElementAt(4), lenguajeCS);
+
+                    return "\n\n\t" + visibilidadFuncion +" "+ tipoFuncion + " " +nombreFuncion[0] + "(" + listaParametrosFuncion + "){\n\n\t" + sentenciaFunciones+ "\n\n\t}";
 
 
             }

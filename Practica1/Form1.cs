@@ -125,6 +125,7 @@ namespace Practica1
 
         private void traducirToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Console.WriteLine(!(true || false));
             Syntactic mySyntactic = new Syntactic();
             //bool resultado = mySyntactic.analyze(getRichTextBox().Text);
             ParseTreeNode resultado = mySyntactic.analyze(getRichTextBox().Text);

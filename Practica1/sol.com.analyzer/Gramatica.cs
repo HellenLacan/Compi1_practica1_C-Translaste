@@ -21,7 +21,7 @@ namespace Practica1.sol.com.analizador
 {
     class Gramatica : Grammar
     {
-        public Gramatica(): base(caseSensitive:true) {
+        public Gramatica() : base(caseSensitive: true) {
 
             #region ER
             RegexBasedTerminal numero = new RegexBasedTerminal("numero", "[0-9]+");
@@ -86,12 +86,13 @@ namespace Practica1.sol.com.analizador
             #region No Terminales
             NonTerminal INICIO = new NonTerminal("INICIO");
             NonTerminal EXPR = new NonTerminal("EXPR");
-            NonTerminal CONDICION = new NonTerminal("CONDICION");
+            NonTerminal CONDICION_COMPARACION = new NonTerminal("CONDICION_COMPARACION");
+            NonTerminal CONDICION_LOGICA = new NonTerminal("CONDICION_LOGICA");
             NonTerminal ASIGNACION_VAR = new NonTerminal("ASIGNACION_VAR");
             NonTerminal TIPO_ASIGN_VAR = new NonTerminal("TIPO_ASIGN_VAR");
             NonTerminal CLASE = new NonTerminal("CLASE");
             NonTerminal LISTA_CLASES = new NonTerminal("LISTA_CLASES");
-            NonTerminal LISTA_SENTENCIAS = new NonTerminal("LISTA_SENTENCIAS");
+            NonTerminal SENTENCIAS_DE_CLASE = new NonTerminal("SENTENCIAS_DE_CLASE");
             NonTerminal VISIBILIDAD = new NonTerminal("VISIBILIDAD");
             NonTerminal VISIBILIDAD_OPC = new NonTerminal("VISIBILIDAD_OPC");
             NonTerminal VARIABLES_GLOBALES = new NonTerminal("VARIABLES_GLOBALES");
@@ -104,8 +105,14 @@ namespace Practica1.sol.com.analizador
             NonTerminal METODOS = new NonTerminal("METODOS");
             NonTerminal FUNCIONES = new NonTerminal("FUNCIONES");
             NonTerminal VARIABLES_LOCALES = new NonTerminal("VARIABLES_LOCALES");
-
-
+            NonTerminal SENTENCIAS_DE_BUCLE = new NonTerminal("SENTENCIAS_DE_BUCLE");
+            NonTerminal SENTENCIAS_DE_FUNCIONES = new NonTerminal("SENTENCIAS_De_FUNCIONES");
+            NonTerminal SENTENCIAS_DE_METODOS = new NonTerminal("SENTENCIAS_DE_METODOS");
+            NonTerminal LISTA_CASE_SWITCH = new NonTerminal("LISTA_CASE_SWITCH");
+            NonTerminal CASE = new NonTerminal("CASE");
+            NonTerminal LISTA_CASE = new NonTerminal("LISTA_CASE");
+            NonTerminal CONDICION_CASE = new NonTerminal("CONDICION_CASE");
+            
             #endregion
 
             #region Gramatica
@@ -114,45 +121,69 @@ namespace Practica1.sol.com.analizador
             LISTA_CLASES.Rule = LISTA_CLASES + CLASE
                                | CLASE;
 
-            CLASE.Rule = _conteiner + identificador + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
+            CLASE.Rule = _conteiner + identificador + corcheteAb + SENTENCIAS_DE_CLASE + corcheteCerr;
 
-            LISTA_SENTENCIAS.Rule = LISTA_SENTENCIAS + VARIABLES_GLOBALES
-                                   |LISTA_SENTENCIAS + CONSTRUCTOR
-                                   |LISTA_SENTENCIAS + METODOS
-                                   |LISTA_SENTENCIAS + FUNCIONES
-                                   |CONSTRUCTOR
-                                   |VARIABLES_GLOBALES
-                                   |METODOS
-                                   |FUNCIONES
-                                   |Empty;
+            SENTENCIAS_DE_CLASE.Rule = SENTENCIAS_DE_CLASE + VARIABLES_GLOBALES
+                                   | SENTENCIAS_DE_CLASE + CONSTRUCTOR
+                                   | SENTENCIAS_DE_CLASE + METODOS
+                                   | SENTENCIAS_DE_CLASE + FUNCIONES
+                                   | CONSTRUCTOR
+                                   | VARIABLES_GLOBALES
+                                   | METODOS
+                                   | FUNCIONES
+                                   | Empty;
+
+            SENTENCIAS_DE_FUNCIONES.Rule = SENTENCIAS_DE_FUNCIONES + SENTENCIAS_DE_BUCLE
+                                          | SENTENCIAS_DE_FUNCIONES
+                                          | Empty;
+
+            SENTENCIAS_DE_METODOS.Rule = SENTENCIAS_DE_METODOS + SENTENCIAS_DE_BUCLE
+                                          | SENTENCIAS_DE_METODOS
+                                          | Empty;
 
             VARIABLES_GLOBALES.Rule = VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR + ptoYComa
-                                     |TIPO + identificador + ASIGNACION_VAR + ptoYComa;
+                                     | TIPO + identificador + ASIGNACION_VAR + ptoYComa;
 
-//            VARIABLES_LOCALES.Rule = TIPO + identificador + ASIGNACION_VAR + ptoYComa;
+            //            VARIABLES_LOCALES.Rule = TIPO + identificador + ASIGNACION_VAR + ptoYComa;
 
             ASIGNACION_VAR.Rule = asignacion + TIPO_ASIGN_VAR
-                                 |Empty;
+                                 | Empty;
 
             TIPO_ASIGN_VAR.Rule = EXPR
-                                 |CONDICION
-                                 | _new +  identificador + parentesisAb + LISTA_VARS + parentesisCerr;
+                                 | CONDICION_COMPARACION
+                                 | _new + identificador + parentesisAb + LISTA_VARS + parentesisCerr;
 
             LISTA_VARS.Rule = LISTA_VARS + coma + EXPR
                              | VARS;
 
             VARS.Rule = EXPR
-                        |Empty;
+                        | Empty;
 
-            CONSTRUCTOR.Rule = identificador + parentesisAb + LISTA_PARAMETROS +parentesisCerr + dosPtos + _public + corcheteAb + corcheteCerr;
+            CONSTRUCTOR.Rule = identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + _public + corcheteAb + corcheteCerr;
 
             LISTA_PARAMETROS.Rule = LISTA_PARAMETROS + coma + TIPO + identificador
                                    | TIPO + identificador
                                    | Empty;
 
-            METODOS.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + _vac + corcheteAb + corcheteCerr;
+            METODOS.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + _vac + corcheteAb + SENTENCIAS_DE_METODOS + corcheteCerr;
 
-            FUNCIONES.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + TIPO + corcheteAb + corcheteCerr;
+            FUNCIONES.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + TIPO + corcheteAb + SENTENCIAS_DE_FUNCIONES + corcheteCerr;
+
+            SENTENCIAS_DE_BUCLE.Rule = _select + parentesisAb + parentesisCerr + corcheteAb + CASE + corcheteCerr;
+
+            LISTA_CASE_SWITCH.Rule = LISTA_CASE_SWITCH + LISTA_CASE
+                                    | LISTA_CASE
+                                    | Empty;
+
+            LISTA_CASE.Rule = _case + CONDICION_CASE + dosPtos
+                             | _default + dosPtos;
+
+            CASE.Rule = _case + CONDICION_CASE + dosPtos + LISTA_CASE_SWITCH;
+
+            CONDICION_CASE.Rule = identificador
+                                  | cadena
+                                  | numero
+                                  | numeroDecimal;
 
             VISIBILIDAD.Rule = _public
                               | _private
@@ -178,15 +209,17 @@ namespace Practica1.sol.com.analizador
                    | menos + EXPR
                    | mas + EXPR;
 
-            CONDICION.Rule =  EXPR + _mayor + EXPR
+            CONDICION_COMPARACION.Rule =  EXPR + _mayor + EXPR
                             | EXPR + _mayorQ + EXPR
                             | EXPR + _menor + EXPR
                             | EXPR + _menorQ + EXPR
                             | EXPR + _equivalente + EXPR
                             | EXPR + _distinto + EXPR
-                            | _not + CONDICION
-                            | parentesisAb + CONDICION + parentesisCerr
-                            ;
+                            //| _not + CONDICION_COMPARACION
+                            //| EXPR + _and + EXPR
+                            | parentesisAb + CONDICION_COMPARACION + parentesisCerr;
+
+            
             #endregion
 
             #region Preferencias

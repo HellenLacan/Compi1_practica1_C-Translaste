@@ -81,6 +81,10 @@ namespace Practica1.sol.com.analizador
             KeyTerm _select = ToTerm("select");
             KeyTerm _new = ToTerm("inst");
             KeyTerm _vac = ToTerm("vac");
+            KeyTerm _sfr = ToTerm("sfr");
+            KeyTerm _inc = ToTerm("inc");
+            KeyTerm _dec = ToTerm("dec");
+
             #endregion
 
             #region No Terminales
@@ -114,7 +118,11 @@ namespace Practica1.sol.com.analizador
             NonTerminal PRINT = new NonTerminal("PRINT");
             NonTerminal SENT_SWITCH = new NonTerminal("SENT_SWITCH");
             NonTerminal BREAK = new NonTerminal("BREAK");
-            
+            NonTerminal FOR = new NonTerminal("FOR");
+            NonTerminal VAR_FOR = new NonTerminal("VAR_FOR");
+            NonTerminal TIPO_VAR_FOR = new NonTerminal("TIPO_VAR_FOR");
+            NonTerminal INCREMENTO = new NonTerminal("INCREMENTO");
+
             #endregion
 
             #region Gramatica
@@ -138,10 +146,23 @@ namespace Practica1.sol.com.analizador
             LISTA_SENTENCIAS.Rule = LISTA_SENTENCIAS + SENT_SWITCH
                                    | LISTA_SENTENCIAS + PRINT
                                    | LISTA_SENTENCIAS + BREAK
+                                   | LISTA_SENTENCIAS + FOR
+                                   | FOR
                                    | SENT_SWITCH
                                    | PRINT
                                    | BREAK
                                    | Empty;
+
+            FOR.Rule = _sfr + parentesisAb + VAR_FOR+ identificador + asignacion + EXPR + ptoYComa + EXPR + ptoYComa + INCREMENTO+ parentesisCerr + corcheteAb + LISTA_SENTENCIAS+corcheteCerr;
+
+            INCREMENTO.Rule = _inc
+                             | _dec;
+
+            VAR_FOR.Rule = _num
+                          |_decimal;
+
+            TIPO_VAR_FOR.Rule = numero
+                               |numeroDecimal;
 
             BREAK.Rule = _break + ptoYComa;
 
@@ -225,7 +246,6 @@ namespace Practica1.sol.com.analizador
                             //| _not + CONDICION_COMPARACION
                             //| EXPR + _and + EXPR
                             | parentesisAb + CONDICION_COMPARACION + parentesisCerr;
-
             #endregion
 
             #region Preferencias
@@ -233,7 +253,9 @@ namespace Practica1.sol.com.analizador
             #endregion
 
             MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa, coma, dosPtos,
-                            _vac, _select, _conteiner, _print, _case);
+                            _vac, _select, _conteiner, _print, _case, _sfr);
+
+            MarkTransient(VAR_FOR);
             
         }
     }

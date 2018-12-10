@@ -16,8 +16,6 @@ namespace Practica1.sol.com.analyzer
             //MessageBox.Show(tot);
         }
 
- 
-
         public static String recorrerAST(ParseTreeNode root, String lenguajeCS) {
 
             switch (root.Term.Name) {
@@ -487,17 +485,6 @@ namespace Practica1.sol.com.analyzer
                                     return keywordCase;
 
                             }
-
-                        /*default:
-                            String tipoLC = root.ChildNodes.ElementAt(0).ToString();
-                            switch (root.ChildNodes.ElementAt(0).ToString()) {
-                                case "cas":
-                                    return "cas";
-
-                                case "def":
-                                    return "def";
-                            }
-                            break;*/
                     }
                     break;
 
@@ -511,6 +498,17 @@ namespace Practica1.sol.com.analyzer
                             String[] term = root.ChildNodes.ElementAt(0).ToString().Split(' '); 
                             return term[0];
                     }
+
+                case "FOR":
+                    String tipoVarFor = (root.ChildNodes.ElementAt(0).ToString() == "Num") ? "int" : "Double";
+                    String []idFor = root.ChildNodes.ElementAt(1).ToString().Split(' ');
+                    String a = root.ChildNodes.ElementAt(4).ChildNodes.ElementAt(0).ToString();
+                    String[] incr = (root.ChildNodes.ElementAt(4).ChildNodes.ElementAt(0).ToString().Split(' '));
+                    String incremento = (incr[0] == "inc") ? "++" : "--";
+                    String sentenciasFor = recorrerAST(root.ChildNodes.ElementAt(5), lenguajeCS);
+
+                    String sentencia = "\n\n\t\tfor("+ tipoVarFor + " " + idFor[0] +"=" + "CONDICION"+ ";"+ "CONDICION"+ ";" +idFor[0]+ incremento +")"+"{\n\n" + sentenciasFor+"\n\t\t}";
+                    return sentencia;
             }
 
             return lenguajeCS;

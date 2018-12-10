@@ -33,8 +33,6 @@ namespace Practica1.sol.com.analizador
             #region Terminales
             var corcheteAb = ToTerm("[");
             var corcheteCerr = ToTerm("]");
-            var llaveAb = ToTerm("{");
-            var llaveCerr = ToTerm("{");
             var parentesisAb = ToTerm("(");
             var parentesisCerr = ToTerm(")");
             var asignacion = ToTerm("=");
@@ -125,7 +123,10 @@ namespace Practica1.sol.com.analizador
             NonTerminal CONDICION = new NonTerminal("CONDICION");
             NonTerminal WHILE = new NonTerminal("WHILE");
             NonTerminal DOWHILE = new NonTerminal("DOWHILE");
-            
+            NonTerminal IF = new NonTerminal("IF");
+            NonTerminal ELSE = new NonTerminal("ELSE");
+            NonTerminal ELSE_OPCIONAL = new NonTerminal("ELSE_OPCIONAL");
+
             #endregion
 
             #region Gramatica
@@ -152,10 +153,12 @@ namespace Practica1.sol.com.analizador
                                    | LISTA_SENTENCIAS + FOR
                                    | LISTA_SENTENCIAS + WHILE
                                    | LISTA_SENTENCIAS + DOWHILE
+                                   | LISTA_SENTENCIAS + IF
                                    | FOR
                                    | WHILE
                                    | DOWHILE
                                    | SENT_SWITCH
+                                   | IF
                                    | PRINT
                                    | BREAK
                                    | Empty;
@@ -165,7 +168,14 @@ namespace Practica1.sol.com.analizador
             WHILE.Rule = _whs + parentesisAb + EXPR + parentesisCerr + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
 
             DOWHILE.Rule = _hc + corcheteAb + LISTA_SENTENCIAS + corcheteCerr + _whs + parentesisAb + EXPR + parentesisCerr + ptoYComa;
-            
+
+            IF.Rule = _sif + parentesisAb + EXPR + parentesisCerr + corcheteAb + LISTA_SENTENCIAS + corcheteCerr + ELSE_OPCIONAL;
+
+            ELSE.Rule = _sifnot + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
+
+            ELSE_OPCIONAL.Rule = ELSE
+                            |Empty;
+
             INCREMENTO.Rule = _inc
                              | _dec;
 
@@ -263,7 +273,7 @@ namespace Practica1.sol.com.analizador
             #endregion
 
             MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa, coma, dosPtos,
-                            _vac, _select, _conteiner, _print, _case, _sfr, _whs);
+                            _vac, _select, _conteiner, _print, _case, _sfr, _whs, _hc, _sif, _sifnot);
 
             MarkTransient(VAR_FOR);
             

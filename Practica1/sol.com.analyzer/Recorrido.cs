@@ -548,10 +548,36 @@ namespace Practica1.sol.com.analyzer
                     return sentencia;
 
                 case "WHILE":
-                    String expr1While = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                    String expre1 = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
                     String listaSentencias = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
-                    String _while = "\n\n\t\twhile(" +  expr1While+ "){\n" + listaSentencias + "\n\n\t\t}"; 
+                    String _while = "\n\n\t\twhile(" +  expre1+ "){\n" + listaSentencias + "\n\n\t\t}";
+                    return _while;
+
+                case "DOWHILE":
+                    listaSentencias = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                    expre1 = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                    return "\n\n\t\tdo{\n\n" + listaSentencias + "\n\n\t\t}while(" + expre1 + ");";
+
+                case "IF":
+                    expre1 = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                    listaSentencias = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                    String opcional = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS); ;
+                    return "\n\n\t\tif(" + expre1 + "){\n\t\t" + listaSentencias + "\n\n\t\t}" + opcional;
+
+                case "ELSE_OPCIONAL":
+                    switch (root.ChildNodes.Count) {
+                        case 0:
+                            return "";
+                        case 1:
+                            listaSentencias = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                            return "else{\n\t\t" + listaSentencias + "\n\t\t}";
+
+                    }
                     break;
+
+                case "ELSE":
+                    return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+
             }
 
             return lenguajeCS;

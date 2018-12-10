@@ -106,13 +106,15 @@ namespace Practica1.sol.com.analizador
             NonTerminal FUNCIONES = new NonTerminal("FUNCIONES");
             NonTerminal VARIABLES_LOCALES = new NonTerminal("VARIABLES_LOCALES");
             NonTerminal SENTENCIAS_DE_BUCLE = new NonTerminal("SENTENCIAS_DE_BUCLE");
-            NonTerminal SENTENCIAS_DE_FUNCIONES = new NonTerminal("SENTENCIAS_De_FUNCIONES");
-            NonTerminal SENTENCIAS_DE_METODOS = new NonTerminal("SENTENCIAS_DE_METODOS");
+            NonTerminal LISTA_SENTENCIAS= new NonTerminal("LISTA_SENTENCIAS");
             NonTerminal LISTA_CASE_SWITCH = new NonTerminal("LISTA_CASE_SWITCH");
             NonTerminal CASE = new NonTerminal("CASE");
             NonTerminal LISTA_CASE = new NonTerminal("LISTA_CASE");
             NonTerminal CONDICION_CASE = new NonTerminal("CONDICION_CASE");
-            
+            NonTerminal PRINT = new NonTerminal("PRINT");
+            NonTerminal SENT_SWITCH = new NonTerminal("SENT_SWITCH");
+
+
             #endregion
 
             #region Gramatica
@@ -133,13 +135,13 @@ namespace Practica1.sol.com.analizador
                                    | FUNCIONES
                                    | Empty;
 
-            SENTENCIAS_DE_FUNCIONES.Rule = SENTENCIAS_DE_FUNCIONES + SENTENCIAS_DE_BUCLE
-                                          | SENTENCIAS_DE_FUNCIONES
-                                          | Empty;
+            LISTA_SENTENCIAS.Rule =  LISTA_SENTENCIAS+ SENT_SWITCH
+                                   | LISTA_SENTENCIAS + PRINT
+                                   | SENT_SWITCH
+                                   | PRINT
+                                   | Empty;
 
-            SENTENCIAS_DE_METODOS.Rule = SENTENCIAS_DE_METODOS + SENTENCIAS_DE_BUCLE
-                                          | SENTENCIAS_DE_METODOS
-                                          | Empty;
+            PRINT.Rule = _print + parentesisAb + EXPR + parentesisCerr + ptoYComa;
 
             VARIABLES_GLOBALES.Rule = VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR + ptoYComa
                                      | TIPO + identificador + ASIGNACION_VAR + ptoYComa;
@@ -165,18 +167,19 @@ namespace Practica1.sol.com.analizador
                                    | TIPO + identificador
                                    | Empty;
 
-            METODOS.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + _vac + corcheteAb + SENTENCIAS_DE_METODOS + corcheteCerr;
+            METODOS.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + _vac + corcheteAb + LISTA_SENTENCIAS+ corcheteCerr;
 
-            FUNCIONES.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + TIPO + corcheteAb + SENTENCIAS_DE_FUNCIONES + corcheteCerr;
+            FUNCIONES.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + TIPO + corcheteAb + LISTA_SENTENCIAS+ corcheteCerr;
 
-            SENTENCIAS_DE_BUCLE.Rule = _select + parentesisAb + parentesisCerr + corcheteAb + CASE + corcheteCerr;
+            SENT_SWITCH.Rule = _select + parentesisAb + EXPR +parentesisCerr + corcheteAb + CASE + corcheteCerr;
 
             LISTA_CASE_SWITCH.Rule = LISTA_CASE_SWITCH + LISTA_CASE
                                     | LISTA_CASE
                                     | Empty;
 
-            LISTA_CASE.Rule = _case + CONDICION_CASE + dosPtos
-                             | _default + dosPtos;
+            LISTA_CASE.Rule = _case + CONDICION_CASE + dosPtos + LISTA_SENTENCIAS
+                             | _default + dosPtos + LISTA_SENTENCIAS
+                             | LISTA_SENTENCIAS;
 
             CASE.Rule = _case + CONDICION_CASE + dosPtos + LISTA_CASE_SWITCH;
 
@@ -219,7 +222,6 @@ namespace Practica1.sol.com.analizador
                             //| EXPR + _and + EXPR
                             | parentesisAb + CONDICION_COMPARACION + parentesisCerr;
 
-            
             #endregion
 
             #region Preferencias
@@ -227,9 +229,8 @@ namespace Practica1.sol.com.analizador
             #endregion
 
             MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa, coma, dosPtos,
-                            _vac);
-
-
+                            _vac, _select, _conteiner, _print, _case);
+            
         }
     }
 }

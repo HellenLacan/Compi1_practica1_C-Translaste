@@ -40,9 +40,9 @@ namespace Practica1.sol.com.analyzer
                                      /   |   \
                              conteiner  id   SENTENCIAS_DE_CLASE
                     */
-                    String[] idClass = (root.ChildNodes.ElementAt(1).ToString()).Split(' ');
+                    String[] idClass = (root.ChildNodes.ElementAt(0).ToString()).Split(' ');
                     lenguajeCS += "\nclass " + idClass[0] + "{";
-                    String hijo3_C = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS); //HIJO 3 DE CLASE (SENTENCIAS_DE_CLASE)
+                    String hijo3_C = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS); //HIJO 3 DE CLASE (SENTENCIAS_DE_CLASE)
                     lenguajeCS += hijo3_C + "\n\n}";
                     break;
 
@@ -403,7 +403,110 @@ namespace Practica1.sol.com.analyzer
 
                     return "\n\n\t" + visibilidadFuncion +" "+ tipoFuncion + " " +nombreFuncion[0] + "(" + listaParametrosFuncion + "){\n\n\t" + sentenciaFunciones+ "\n\n\t}";
 
+                case "LISTA_SENTENCIAS":
+                    switch (root.ChildNodes.Count) {
 
+                        case 0:
+                            return "";
+
+                        case 1:
+                             
+                            return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+
+                        case 2:
+                            String listaSent = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                            String sentencias = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                            return listaSent + sentencias;
+                    }
+                    break;
+                        
+                case "PRINT":
+                    return "\n\t\tConsole.WriteLine(" + recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS) + ");";
+
+                case "SENT_SWITCH":
+                    String exprSentSwitch = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                    String sent_switch = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                    String sentSentSwitch = "\n\n\t\tswitch(" + exprSentSwitch + "){\n" + sent_switch + "\n\n\t\t}";
+                    return sentSentSwitch;
+
+                case "CASE":
+                    String condicionCase = "\n\t\tcase " + recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS) + ":";
+                    String listaCase = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                    return condicionCase + listaCase;
+
+                case "LISTA_CASE_SWITCH":
+                    switch (root.ChildNodes.Count) {
+                        case 0:
+                            return "";
+                        case 1:
+                            String L = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS); 
+                            return  L;
+
+                        case 2:
+                            String listaSwithCase = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                            String listCase = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                            return listaSwithCase + listCase;
+                    }
+                    break;
+
+                case "LISTA_CASE":
+
+                    String condicion;
+                    String listaSEntCase;
+
+                    switch (root.ChildNodes.Count) {
+
+                        case 1:
+                            condicion = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                            return condicion;
+
+                        case 2:
+                            String keywordCase;
+
+                            switch (root.ChildNodes.ElementAt(0).Term.Name) {
+
+                                case "CONDICION_CASE":
+                                    String cond1 = "\n\n\t\tcase "+recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS) + ":";
+                                    String cond2 = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                                    return cond1 + cond2;
+
+                                default :
+                                    if (root.ChildNodes.ElementAt(0).ToString() == "cas")
+                                    {
+                                        keywordCase = "\n\n\t\tcase " + ":" + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                                    }
+                                    else
+                                    {
+                                        keywordCase = "\n\n\t\tdefault: " + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+
+                                    }
+                                    return keywordCase;
+
+                            }
+
+                        default:
+                            String tipoLC = root.ChildNodes.ElementAt(0).ToString();
+                            switch (root.ChildNodes.ElementAt(0).ToString()) {
+                                case "cas":
+                                    return "cas";
+
+                                case "def":
+                                    return "def";
+                            }
+                            break;
+                    }
+                    break;
+
+                case "CONDICION_CASE":
+                    switch (root.ChildNodes.ElementAt(0).Term.Name) {
+                        case "cadena":
+                            string[] separatingChars = { "(" };
+                            string[] cadena = root.ChildNodes.ElementAt(0).ToString().Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
+                            return "\"" + cadena[0] + "\"";
+                        default:
+                            String[] term = root.ChildNodes.ElementAt(0).ToString().Split(' '); 
+                            return term[0];
+                    }
             }
 
             return lenguajeCS;

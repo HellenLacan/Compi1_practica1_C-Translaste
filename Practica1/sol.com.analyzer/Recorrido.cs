@@ -418,10 +418,15 @@ namespace Practica1.sol.com.analyzer
                             String sentencias = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
                             return listaSent + sentencias;
                     }
+
                     break;
                         
                 case "PRINT":
                     return "\n\t\tConsole.WriteLine(" + recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS) + ");";
+
+                case "BREAK":
+                    return "\n\t\tBreak;";
+
 
                 case "SENT_SWITCH":
                     String exprSentSwitch = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
@@ -452,7 +457,6 @@ namespace Practica1.sol.com.analyzer
                 case "LISTA_CASE":
 
                     String condicion;
-                    String listaSEntCase;
 
                     switch (root.ChildNodes.Count) {
 
@@ -484,7 +488,7 @@ namespace Practica1.sol.com.analyzer
 
                             }
 
-                        default:
+                        /*default:
                             String tipoLC = root.ChildNodes.ElementAt(0).ToString();
                             switch (root.ChildNodes.ElementAt(0).ToString()) {
                                 case "cas":
@@ -493,7 +497,7 @@ namespace Practica1.sol.com.analyzer
                                 case "def":
                                     return "def";
                             }
-                            break;
+                            break;*/
                     }
                     break;
 

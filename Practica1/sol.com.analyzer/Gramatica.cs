@@ -106,15 +106,15 @@ namespace Practica1.sol.com.analizador
             NonTerminal FUNCIONES = new NonTerminal("FUNCIONES");
             NonTerminal VARIABLES_LOCALES = new NonTerminal("VARIABLES_LOCALES");
             NonTerminal SENTENCIAS_DE_BUCLE = new NonTerminal("SENTENCIAS_DE_BUCLE");
-            NonTerminal LISTA_SENTENCIAS= new NonTerminal("LISTA_SENTENCIAS");
+            NonTerminal LISTA_SENTENCIAS = new NonTerminal("LISTA_SENTENCIAS");
             NonTerminal LISTA_CASE_SWITCH = new NonTerminal("LISTA_CASE_SWITCH");
             NonTerminal CASE = new NonTerminal("CASE");
             NonTerminal LISTA_CASE = new NonTerminal("LISTA_CASE");
             NonTerminal CONDICION_CASE = new NonTerminal("CONDICION_CASE");
             NonTerminal PRINT = new NonTerminal("PRINT");
             NonTerminal SENT_SWITCH = new NonTerminal("SENT_SWITCH");
-
-
+            NonTerminal BREAK = new NonTerminal("BREAK");
+            
             #endregion
 
             #region Gramatica
@@ -135,11 +135,15 @@ namespace Practica1.sol.com.analizador
                                    | FUNCIONES
                                    | Empty;
 
-            LISTA_SENTENCIAS.Rule =  LISTA_SENTENCIAS+ SENT_SWITCH
+            LISTA_SENTENCIAS.Rule = LISTA_SENTENCIAS + SENT_SWITCH
                                    | LISTA_SENTENCIAS + PRINT
+                                   | LISTA_SENTENCIAS + BREAK
                                    | SENT_SWITCH
                                    | PRINT
+                                   | BREAK
                                    | Empty;
+
+            BREAK.Rule = _break + ptoYComa;
 
             PRINT.Rule = _print + parentesisAb + EXPR + parentesisCerr + ptoYComa;
 

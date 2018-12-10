@@ -546,6 +546,12 @@ namespace Practica1.sol.com.analyzer
 
                     String sentencia = "\n\n\t\tfor("+ tipoVarFor + " " + idFor[0] +"=" + expr1+ "; "+ expr2+ "; " +idFor[0]+ incremento +")"+"{\n\n" + sentenciasFor+"\n\t\t}";
                     return sentencia;
+
+                case "WHILE":
+                    String expr1While = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                    String listaSentencias = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                    String _while = "\n\n\t\twhile(" +  expr1While+ "){\n" + listaSentencias + "\n\n\t\t}"; 
+                    break;
             }
 
             return lenguajeCS;

@@ -263,7 +263,7 @@ namespace Practica1.sol.com.analizador
             #endregion
 
             MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa, coma, dosPtos,
-                            _vac, _select, _conteiner, _print, _case, _sfr);
+                            _vac, _select, _conteiner, _print, _case, _sfr, _whs);
 
             MarkTransient(VAR_FOR);
             

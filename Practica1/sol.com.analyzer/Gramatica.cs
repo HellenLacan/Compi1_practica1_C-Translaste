@@ -122,7 +122,10 @@ namespace Practica1.sol.com.analizador
             NonTerminal VAR_FOR = new NonTerminal("VAR_FOR");
             NonTerminal TIPO_VAR_FOR = new NonTerminal("TIPO_VAR_FOR");
             NonTerminal INCREMENTO = new NonTerminal("INCREMENTO");
-
+            NonTerminal CONDICION = new NonTerminal("CONDICION");
+            NonTerminal WHILE = new NonTerminal("WHILE");
+            NonTerminal DOWHILE = new NonTerminal("DOWHILE");
+            
             #endregion
 
             #region Gramatica
@@ -147,22 +150,30 @@ namespace Practica1.sol.com.analizador
                                    | LISTA_SENTENCIAS + PRINT
                                    | LISTA_SENTENCIAS + BREAK
                                    | LISTA_SENTENCIAS + FOR
+                                   | LISTA_SENTENCIAS + WHILE
+                                   | LISTA_SENTENCIAS + DOWHILE
                                    | FOR
+                                   | WHILE
+                                   | DOWHILE
                                    | SENT_SWITCH
                                    | PRINT
                                    | BREAK
                                    | Empty;
 
-            FOR.Rule = _sfr + parentesisAb + VAR_FOR+ identificador + asignacion + EXPR + ptoYComa + EXPR + ptoYComa + INCREMENTO+ parentesisCerr + corcheteAb + LISTA_SENTENCIAS+corcheteCerr;
+            FOR.Rule = _sfr + parentesisAb + VAR_FOR + identificador + asignacion + EXPR + ptoYComa + EXPR + ptoYComa + INCREMENTO + parentesisCerr + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
 
+            WHILE.Rule = _whs + parentesisAb + EXPR + parentesisCerr + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
+
+            DOWHILE.Rule = _hc + corcheteAb + LISTA_SENTENCIAS + corcheteCerr + _whs + parentesisAb + EXPR + parentesisCerr + ptoYComa;
+            
             INCREMENTO.Rule = _inc
                              | _dec;
 
             VAR_FOR.Rule = _num
-                          |_decimal;
+                          | _decimal;
 
             TIPO_VAR_FOR.Rule = numero
-                               |numeroDecimal;
+                               | numeroDecimal;
 
             BREAK.Rule = _break + ptoYComa;
 
@@ -177,7 +188,6 @@ namespace Practica1.sol.com.analizador
                                  | Empty;
 
             TIPO_ASIGN_VAR.Rule = EXPR
-                                 | CONDICION_COMPARACION
                                  | _new + identificador + parentesisAb + LISTA_VARS + parentesisCerr;
 
             LISTA_VARS.Rule = LISTA_VARS + coma + EXPR
@@ -192,11 +202,11 @@ namespace Practica1.sol.com.analizador
                                    | TIPO + identificador
                                    | Empty;
 
-            METODOS.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + _vac + corcheteAb + LISTA_SENTENCIAS+ corcheteCerr;
+            METODOS.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + _vac + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
 
-            FUNCIONES.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + TIPO + corcheteAb + LISTA_SENTENCIAS+ corcheteCerr;
+            FUNCIONES.Rule = VISIBILIDAD + identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + TIPO + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
 
-            SENT_SWITCH.Rule = _select + parentesisAb + EXPR +parentesisCerr + corcheteAb + CASE + corcheteCerr;
+            SENT_SWITCH.Rule = _select + parentesisAb + EXPR + parentesisCerr + corcheteAb + CASE + corcheteCerr;
 
             LISTA_CASE_SWITCH.Rule = LISTA_CASE_SWITCH + LISTA_CASE
                                     | LISTA_CASE
@@ -215,7 +225,7 @@ namespace Practica1.sol.com.analizador
 
             VISIBILIDAD.Rule = _public
                               | _private
-                              | _protected  ;
+                              | _protected;
 
             TIPO.Rule = _str
                        | _num
@@ -227,7 +237,16 @@ namespace Practica1.sol.com.analizador
                    | EXPR + div + EXPR
                    | EXPR + mas + EXPR
                    | EXPR + menos + EXPR
+                   | EXPR + _or + EXPR
+                   | EXPR + _and + EXPR
+                   | EXPR + _mayor + EXPR
+                   | EXPR + _mayorQ + EXPR
+                   | EXPR + _menor + EXPR
+                   | EXPR + _menorQ + EXPR
+                   | EXPR + _equivalente + EXPR
+                   | EXPR + _distinto + EXPR
                    | parentesisAb + EXPR + parentesisCerr
+                   | _not + EXPR
                    | numero
                    | numeroDecimal
                    | identificador
@@ -236,16 +255,7 @@ namespace Practica1.sol.com.analizador
                    | _fals
                    | menos + EXPR
                    | mas + EXPR;
-
-            CONDICION_COMPARACION.Rule =  EXPR + _mayor + EXPR
-                            | EXPR + _mayorQ + EXPR
-                            | EXPR + _menor + EXPR
-                            | EXPR + _menorQ + EXPR
-                            | EXPR + _equivalente + EXPR
-                            | EXPR + _distinto + EXPR
-                            //| _not + CONDICION_COMPARACION
-                            //| EXPR + _and + EXPR
-                            | parentesisAb + CONDICION_COMPARACION + parentesisCerr;
+            
             #endregion
 
             #region Preferencias

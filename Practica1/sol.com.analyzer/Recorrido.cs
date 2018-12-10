@@ -181,10 +181,7 @@ namespace Practica1.sol.com.analyzer
 
                         case "EXPR":
                             return " = " + recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
-
-                        case "CONDICION_COMPARACION":
-                            return " = " + recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
-
+                            
                         default:
                             String[] id_tipoAsingVar = (root.ChildNodes.ElementAt(1).ToString()).Split();
                             String parametros = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
@@ -202,51 +199,94 @@ namespace Practica1.sol.com.analyzer
 
                             if (hoja == "EXPR")
                             {
-                                String[] hojaE = (recorrerAST(root.ChildNodes.ElementAt(0),lenguajeCS)).ToString().Split(' ');
-                                return "(" + hojaE[0] + ")"; ;
+                                String hojaE = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                                return "(" + hojaE + ")"; ;
+                            } else if (hoja == "trus (identificador)") {
+                                return "true";
+                            } else if (hoja == "fals (identificador)") {
+                                return "false";
                             }
 
                             if (root.ChildNodes.ElementAt(0).Term.Name == "cadena") {
-                                hoja = "\"" + cadena[0] + "\"";
-                            } else if (root.ChildNodes.ElementAt(0).Term.Name == "numero" | root.ChildNodes.ElementAt(0).Term.Name == "numeroDecimal" |
-                                       root.ChildNodes.ElementAt(0).Term.Name == "identificador") {
-                                hoja = numero[0];
+                                return hoja = "\"" + cadena[0] + "\"";
+                            } else if (root.ChildNodes.ElementAt(0).Term.Name == "numero" || root.ChildNodes.ElementAt(0).Term.Name == "numeroDecimal" ||
+                                       root.ChildNodes.ElementAt(0).Term.Name == "identificador" || root.ChildNodes.ElementAt(0).Term.Name == "_trus"
+                                       ) {
+                                return hoja = numero[0];
+                            } else if (root.ChildNodes.ElementAt(0).Term.Name == "_fals") {
+                                return hoja = "true";
                             }
-                            return (hoja);
-                            
+                            break;
                         case 2:
                             String[] signoN = (root.ChildNodes.ElementAt(0)).ToString().Split(' ');
-                            hoja = signoN[0] + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                            hoja = signoN[0] + " "+recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
                             return hoja;
 
                         case 3:
 
-                            String[] n1 = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS).Split(' ');
-                            String[] n2 = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS).Split(' ');
-                            String[] signo = (root.ChildNodes.ElementAt(1).ToString()).Split(' ') ;
-
+                            String caseOrDefault = (root.ChildNodes.ElementAt(0).Term.Name == "EXPR") ? "\n\n\t\tcase " + ":" : "\n\n\t\tdefault: ";
+                            if (root.ChildNodes.ElementAt(0).Term.Name == "EXPR")
+                            {
+                                String n1 = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                                String n2 = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
+                                String[] signo = (root.ChildNodes.ElementAt(1).ToString()).Split(' ');
+                                //return n1 + " " + signo[0] + " " + n2;
 
                                 switch (signo[0])
                                 {
 
                                     case "+":
-                                        return (n1[0] + "+" + n2[0]);
+                                        return (n1 + "+" + n2);
 
                                     case "-":
-                                        return (n1[0] + "-" + n2[0]);
+                                        return (n1 + "-" + n2);
 
 
                                     case "*":
-                                        return (n1[0] + "*" + n2[0]);
+                                        return (n1 + "*" + n2);
 
 
                                     case "/":
-                                        return (n1[0] + "/" + n2[0]);
+                                        return (n1 + "/" + n2);
 
-                                default:
-                                        return (n1[0] + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS) + n2[0]);
 
+                                    case "Lt":
+                                        return (n1 + "<" + n2);
+
+                                    case "Lte":
+                                        return (n1+ " <= " + n2);
+
+                                    case "Gt":
+                                        return (n1 + " > " + n2);
+
+                                    case "Gte":
+                                        return (n1 + " >= " + n2);
+
+                                    case "Eq":
+                                        return (n1 + " == " + n2);
+
+                                    case "Eqs":
+                                        return (n1 + " != " + n2);
+
+                                    case "and":
+                                        return (n1 + " && " + n2);
+
+                                    case "or":
+                                        return (n1+ " || " + n2);
+
+                                }
                             }
+                            break;
+                            //String[] n1 = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS).Split(' ');
+                            //String[] n2 = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS).Split(' ');
+                            //String[] signo = (root.ChildNodes.ElementAt(1).ToString()).Split(' ') ;
+
+
+                                    
+                            //    default:
+                            //        return (n1[0] + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS) + n2[0]);
+
+                            //}
 
                     }
 
@@ -473,15 +513,10 @@ namespace Practica1.sol.com.analyzer
                                     return cond1 + cond2;
 
                                 default :
-                                    if (root.ChildNodes.ElementAt(0).ToString() == "cas")
-                                    {
-                                        keywordCase = "\n\n\t\tcase " + ":" + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
-                                    }
-                                    else
-                                    {
-                                        keywordCase = "\n\n\t\tdefault: " + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
 
-                                    }
+                                    String caseOrDefault = (root.ChildNodes.ElementAt(0).ToString() == "cas") ? "\n\n\t\tcase " + ":" : "\n\n\t\tdefault: ";
+                                    keywordCase = caseOrDefault + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+
                                     return keywordCase;
 
                             }
@@ -506,8 +541,10 @@ namespace Practica1.sol.com.analyzer
                     String[] incr = (root.ChildNodes.ElementAt(4).ChildNodes.ElementAt(0).ToString().Split(' '));
                     String incremento = (incr[0] == "inc") ? "++" : "--";
                     String sentenciasFor = recorrerAST(root.ChildNodes.ElementAt(5), lenguajeCS);
+                    String expr1 = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
+                    String expr2 = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
 
-                    String sentencia = "\n\n\t\tfor("+ tipoVarFor + " " + idFor[0] +"=" + "CONDICION"+ ";"+ "CONDICION"+ ";" +idFor[0]+ incremento +")"+"{\n\n" + sentenciasFor+"\n\t\t}";
+                    String sentencia = "\n\n\t\tfor("+ tipoVarFor + " " + idFor[0] +"=" + expr1+ "; "+ expr2+ "; " +idFor[0]+ incremento +")"+"{\n\n" + sentenciasFor+"\n\t\t}";
                     return sentencia;
             }
 

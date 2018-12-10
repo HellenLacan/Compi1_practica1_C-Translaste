@@ -44,6 +44,8 @@ namespace Practica1.sol.com.analizador
             var por = ToTerm("*");
             var div = ToTerm("/");
             var dosPtos = ToTerm(":");
+            var pto = ToTerm(".");
+
             #endregion
 
             #region PalabrasReservadas
@@ -126,6 +128,8 @@ namespace Practica1.sol.com.analizador
             NonTerminal IF = new NonTerminal("IF");
             NonTerminal ELSE = new NonTerminal("ELSE");
             NonTerminal ELSE_OPCIONAL = new NonTerminal("ELSE_OPCIONAL");
+            NonTerminal THIS = new NonTerminal("THIS");
+            NonTerminal LISTA_THIS = new NonTerminal("LISTA_THIS");
 
             #endregion
 
@@ -154,6 +158,8 @@ namespace Practica1.sol.com.analizador
                                    | LISTA_SENTENCIAS + WHILE
                                    | LISTA_SENTENCIAS + DOWHILE
                                    | LISTA_SENTENCIAS + IF
+                                   | LISTA_SENTENCIAS + VARIABLES_LOCALES
+                                   | VARIABLES_LOCALES
                                    | FOR
                                    | WHILE
                                    | DOWHILE
@@ -192,7 +198,14 @@ namespace Practica1.sol.com.analizador
             VARIABLES_GLOBALES.Rule = VISIBILIDAD + TIPO + identificador + ASIGNACION_VAR + ptoYComa
                                      | TIPO + identificador + ASIGNACION_VAR + ptoYComa;
 
-            //            VARIABLES_LOCALES.Rule = TIPO + identificador + ASIGNACION_VAR + ptoYComa;
+            VARIABLES_LOCALES.Rule = TIPO + identificador + ASIGNACION_VAR + ptoYComa
+                                     |identificador + ASIGNACION_VAR + ptoYComa 
+                                     |THIS;
+
+            THIS.Rule = _prop + LISTA_THIS + ASIGNACION_VAR + ptoYComa;
+
+            LISTA_THIS.Rule = LISTA_THIS + pto + identificador
+                             |pto + identificador;
 
             ASIGNACION_VAR.Rule = asignacion + TIPO_ASIGN_VAR
                                  | Empty;
@@ -206,7 +219,7 @@ namespace Practica1.sol.com.analizador
             VARS.Rule = EXPR
                         | Empty;
 
-            CONSTRUCTOR.Rule = identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + _public + corcheteAb + corcheteCerr;
+            CONSTRUCTOR.Rule = identificador + parentesisAb + LISTA_PARAMETROS + parentesisCerr + dosPtos + _public + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
 
             LISTA_PARAMETROS.Rule = LISTA_PARAMETROS + coma + TIPO + identificador
                                    | TIPO + identificador
@@ -273,7 +286,7 @@ namespace Practica1.sol.com.analizador
             #endregion
 
             MarkPunctuation(corcheteAb, corcheteCerr, parentesisAb,parentesisCerr, asignacion ,ptoYComa, coma, dosPtos,
-                            _vac, _select, _conteiner, _print, _case, _sfr, _whs, _hc, _sif, _sifnot);
+                            _vac, _select, _conteiner, _print, _case, _sfr, _whs, _hc, _sif, _sifnot, pto , ToTerm("prop"), ToTerm("."));
 
             MarkTransient(VAR_FOR);
             

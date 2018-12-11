@@ -42,6 +42,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.lblLinea = new System.Windows.Forms.Label();
             this.lblColumna = new System.Windows.Forms.Label();
+            this.LineNumberTextBox = new System.Windows.Forms.RichTextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -113,10 +114,10 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Location = new System.Drawing.Point(28, 31);
+            this.tabControl1.Location = new System.Drawing.Point(54, 31);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(563, 395);
+            this.tabControl1.Size = new System.Drawing.Size(537, 395);
             this.tabControl1.TabIndex = 1;
             // 
             // richTextBoxTraducido
@@ -159,11 +160,26 @@
             this.lblColumna.Size = new System.Drawing.Size(0, 13);
             this.lblColumna.TabIndex = 7;
             // 
+            // LineNumberTextBox
+            // 
+            this.LineNumberTextBox.BackColor = System.Drawing.SystemColors.Control;
+            this.LineNumberTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.LineNumberTextBox.Cursor = System.Windows.Forms.Cursors.PanNE;
+            this.LineNumberTextBox.Font = new System.Drawing.Font("Verdana", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LineNumberTextBox.Location = new System.Drawing.Point(12, 51);
+            this.LineNumberTextBox.Name = "LineNumberTextBox";
+            this.LineNumberTextBox.ReadOnly = true;
+            this.LineNumberTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
+            this.LineNumberTextBox.Size = new System.Drawing.Size(36, 375);
+            this.LineNumberTextBox.TabIndex = 8;
+            this.LineNumberTextBox.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1193, 627);
+            this.Controls.Add(this.LineNumberTextBox);
             this.Controls.Add(this.lblColumna);
             this.Controls.Add(this.lblLinea);
             this.Controls.Add(this.label1);
@@ -198,6 +214,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblLinea;
         private System.Windows.Forms.Label lblColumna;
+        private System.Windows.Forms.RichTextBox LineNumberTextBox;
     }
 }
 

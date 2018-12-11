@@ -22,6 +22,77 @@ namespace Practica1
         public Form1()
         {
             InitializeComponent();
+            selectionStart = 0;
+            TabPage newTabPage = new TabPage("New Document");
+            newTabPage.Font = new Font("Verdana", 18);
+
+            RichTextBox newTextBox = new RichTextBox();
+            newTextBox.Dock = DockStyle.Fill;
+            newTextBox.Font = new Font("Verdana", 10);
+            newTextBox.BackColor = Color.White;
+            newTextBox.BorderStyle = BorderStyle.None;
+
+            newTabPage.Controls.Add(newTextBox);
+            tabControl1.TabPages.Add(newTabPage);
+            newTextBox.SelectionChanged += new System.EventHandler(this.newTextBox_SelectionChanged);
+            selectionStart = newTextBox.SelectionStart;
+
+            getRichTextBox().Select();
+
+            AddLineNumbers();
+            
+        }
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            AddLineNumbers();
+        }
+
+        public int getWidth()
+        {
+            int w = 25;
+            // get total lines of richTextBox1    
+            int line = getRichTextBox().Lines.Length;
+
+            if (line <= 99)
+            {
+                w = 20 + (int)getRichTextBox().Font.Size;
+            }
+            else if (line <= 999)
+            {
+                w = 30 + (int)getRichTextBox().Font.Size;
+            }
+            else
+            {
+                w = 50 + (int)getRichTextBox().Font.Size;
+            }
+
+            return w;
+        }
+
+        public void AddLineNumbers()
+        {
+            // create & set Point pt to (0,0)    
+            Point pt = new Point(0, 0);
+            // get First Index & First Line from richTextBox1    
+            int First_Index = getRichTextBox().GetCharIndexFromPosition(pt);
+            int First_Line = getRichTextBox().GetLineFromCharIndex(First_Index);
+            // set X & Y coordinates of Point pt to ClientRectangle Width & Height respectively    
+            pt.X = ClientRectangle.Width;
+            pt.Y = ClientRectangle.Height;
+            // get Last Index & Last Line from richTextBox1    
+            int Last_Index = getRichTextBox().GetCharIndexFromPosition(pt);
+            int Last_Line = getRichTextBox().GetLineFromCharIndex(Last_Index);
+            // set Center alignment to LineNumberTextBox    
+            LineNumberTextBox.SelectionAlignment = HorizontalAlignment.Center;
+            // set LineNumberTextBox text to null & width to getWidth() function value    
+            LineNumberTextBox.Text = "";
+            LineNumberTextBox.Width = getWidth();
+            // now add each line number to LineNumberTextBox upto last line    
+            for (int i = First_Line; i <= Last_Line + 2; i++)
+            {
+                LineNumberTextBox.Text += i + 1 + "\n";
+            }
         }
 
         private void abrirToolStripMenuItem_Click(object sender, EventArgs e){
@@ -73,8 +144,14 @@ namespace Practica1
             int firstChar = getRichTextBox().GetFirstCharIndexFromLine(line);
             int column = index - firstChar;
 
-            lblLinea.Text = "Line: " + line;
-            lblColumna.Text = "Col: " + column;
+            lblLinea.Text = "Line: " + (line +1) ;
+            lblColumna.Text = "Col: " + (column + 1);
+
+            Point pt = getRichTextBox().GetPositionFromCharIndex(getRichTextBox().SelectionStart);
+            if (pt.X == 1)
+            {
+                AddLineNumbers();
+            }
 
         }
 
@@ -97,8 +174,41 @@ namespace Practica1
             tabControl1.TabPages.Add(newTabPage);
 
             newTextBox.SelectionChanged += new System.EventHandler(this.newTextBox_SelectionChanged);
-            selectionStart = newTextBox.SelectionStart;
+            newTextBox.FontChanged += new System.EventHandler(this.newTextBox_FontChanged);
+            newTextBox.TextChanged += new System.EventHandler(this.newTextBox_TextChanged);
+            newTextBox.VScroll += new System.EventHandler(this.newTextBox_VScroll);
 
+            selectionStart = newTextBox.SelectionStart;
+            LineNumberTextBox.Text = "1\n2";
+            
+        }
+
+        private void newTextBox_VScroll(object sender, EventArgs e)
+        {
+            LineNumberTextBox.Text = "";
+            AddLineNumbers();
+            LineNumberTextBox.Invalidate();
+        }
+
+        private void newTextBox_TextChanged(object sender, EventArgs e)
+        {
+            if (getRichTextBox().Text == "")
+            {
+                AddLineNumbers();
+            }
+        }
+
+        private void newTextBox_FontChanged(object sender, EventArgs e)
+        {
+            LineNumberTextBox.Font = richTextBox1.Font;
+            getRichTextBox().Select();
+            AddLineNumbers();
+        }
+
+        private void LineNumberTextBox_MouseDown(object sender, MouseEventArgs e)
+        {
+            getRichTextBox().Select();
+            LineNumberTextBox.DeselectAll();
         }
 
         private void saveAs_Click(object sender, EventArgs e)

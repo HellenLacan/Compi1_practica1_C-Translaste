@@ -65,6 +65,7 @@
     <Compile Include="sol.com.analyzer\Gramatica.cs" />
     <Compile Include="sol.com.analyzer\Recorrido.cs" />
     <Compile Include="sol.com.analyzer\Syntactic.cs" />
+    <Compile Include="sol.com.analyzer\Token.cs" />
     <Compile Include="sol.com.controlDot\ControlDot.cs" />
     <Compile Include="sol.com.window\Archive.cs" />
     <EmbeddedResource Include="Form1.resx">

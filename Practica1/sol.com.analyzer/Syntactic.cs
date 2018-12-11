@@ -12,6 +12,8 @@ namespace Practica1.sol.com.analyzer
 {
     class Syntactic : Grammar
     {
+        public static List<Token[]> lista = new List<Token[]>();
+
         public ParseTreeNode analyze(String text) {
 
             Gramatica myGrammar = new Gramatica();
@@ -19,6 +21,28 @@ namespace Practica1.sol.com.analyzer
             Parser p = new Parser(lenguaje);
             ParseTree tree = p.Parse(text);
             ParseTreeNode root = tree.Root;
+
+            if (root == null)
+            {
+                for (int i = 0; i < tree.ParserMessages.Count(); i++) {
+                    String error = tree.ParserMessages.ElementAt(i).Level.ToString();
+                    String fila = tree.ParserMessages.ElementAt(i).Location.Line.ToString();
+                    String columna = tree.ParserMessages.ElementAt(i).Location.Column.ToString();
+                    String nombre = tree.ParserMessages.ElementAt(i).Message.ToString();
+
+                    string[] separatingChars = { "'" };
+                    string[] cadena = nombre.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
+
+                    string[] separatingChars2 = { ":" };
+                    string[] espectativa = nombre.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
+                    
+                    Token token = new Token();
+                }
+            }
+            else {
+
+            }
+
             return root;
         }
 
@@ -29,5 +53,7 @@ namespace Practica1.sol.com.analyzer
            // WINGRAPHVIZLib.BinaryImage img = dot.ToPNG(grafoDot);
             //img.Save("AST.png");
         }
+
+        
     }
 }

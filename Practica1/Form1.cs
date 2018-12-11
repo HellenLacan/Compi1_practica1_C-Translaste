@@ -62,8 +62,25 @@ namespace Practica1
                 getRichTextBox().Text = content;
             }
         }
-        
-    //CREAR PESTAÑA NUEVA
+
+        //Control de linea y columna en un richtexBox
+        private void newTextBox_SelectionChanged(object sender, EventArgs e)
+        {
+            int index = getRichTextBox().SelectionStart;
+            int line = getRichTextBox().GetLineFromCharIndex(index);
+
+            // Get the column.
+            int firstChar = getRichTextBox().GetFirstCharIndexFromLine(line);
+            int column = index - firstChar;
+
+            lblLinea.Text = "Line: " + line;
+            lblColumna.Text = "Col: " + column;
+
+        }
+
+        int selectionStart = 1;
+
+        //CREAR PESTAÑA NUEVA
         private void newTab_Click(object sender, EventArgs e)
         {
             //TABPANEL1
@@ -79,18 +96,9 @@ namespace Practica1
             newTabPage.Controls.Add(newTextBox);
             tabControl1.TabPages.Add(newTabPage);
 
-            ////TABPANEL2
-            //TabPage newTabPage2 = new TabPage("New Document");
-            //newTabPage2.Font = new Font("Verdana", 18);
+            newTextBox.SelectionChanged += new System.EventHandler(this.newTextBox_SelectionChanged);
+            selectionStart = newTextBox.SelectionStart;
 
-            //RichTextBox newTextBox2 = new RichTextBox();
-            //newTextBox2.Dock = DockStyle.Fill;
-            //newTextBox2.Font = new Font("Verdana", 10);
-            //newTextBox2.BackColor = Color.White;
-            //newTextBox2.BorderStyle = BorderStyle.None;
-
-            //newTabPage2.Controls.Add(newTextBox2);
-            //tabControl2.TabPages.Add(newTabPage2);
         }
 
         private void saveAs_Click(object sender, EventArgs e)

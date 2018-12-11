@@ -38,6 +38,10 @@
             this.traducirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.richTextBoxTraducido = new System.Windows.Forms.RichTextBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.lblLinea = new System.Windows.Forms.Label();
+            this.lblColumna = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,7 +52,7 @@
             this.traducirToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1180, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1193, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             this.menuStrip1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
@@ -112,22 +116,58 @@
             this.tabControl1.Location = new System.Drawing.Point(28, 31);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(563, 568);
+            this.tabControl1.Size = new System.Drawing.Size(563, 395);
             this.tabControl1.TabIndex = 1;
             // 
             // richTextBoxTraducido
             // 
             this.richTextBoxTraducido.Location = new System.Drawing.Point(610, 31);
             this.richTextBoxTraducido.Name = "richTextBoxTraducido";
-            this.richTextBoxTraducido.Size = new System.Drawing.Size(558, 568);
+            this.richTextBoxTraducido.Size = new System.Drawing.Size(558, 395);
             this.richTextBoxTraducido.TabIndex = 2;
             this.richTextBoxTraducido.Text = "";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(28, 457);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(1140, 133);
+            this.richTextBox1.TabIndex = 3;
+            this.richTextBox1.Text = "";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(403, 433);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(0, 13);
+            this.label1.TabIndex = 4;
+            // 
+            // lblLinea
+            // 
+            this.lblLinea.AutoSize = true;
+            this.lblLinea.Location = new System.Drawing.Point(445, 433);
+            this.lblLinea.Name = "lblLinea";
+            this.lblLinea.Size = new System.Drawing.Size(0, 13);
+            this.lblLinea.TabIndex = 6;
+            // 
+            // lblColumna
+            // 
+            this.lblColumna.AutoSize = true;
+            this.lblColumna.Location = new System.Drawing.Point(546, 433);
+            this.lblColumna.Name = "lblColumna";
+            this.lblColumna.Size = new System.Drawing.Size(0, 13);
+            this.lblColumna.TabIndex = 7;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1180, 611);
+            this.ClientSize = new System.Drawing.Size(1193, 627);
+            this.Controls.Add(this.lblColumna);
+            this.Controls.Add(this.lblLinea);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.richTextBoxTraducido);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
@@ -154,6 +194,10 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.ToolStripMenuItem traducirToolStripMenuItem;
         private System.Windows.Forms.RichTextBox richTextBoxTraducido;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lblLinea;
+        private System.Windows.Forms.Label lblColumna;
     }
 }
 

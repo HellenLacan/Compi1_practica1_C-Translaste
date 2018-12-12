@@ -37,12 +37,14 @@
             this.cToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.traducirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.richTextBoxTraducido = new System.Windows.Forms.RichTextBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblLinea = new System.Windows.Forms.Label();
             this.lblColumna = new System.Windows.Forms.Label();
             this.LineNumberTextBox = new System.Windows.Forms.RichTextBox();
+            this.cerrarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.exportarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,7 +52,9 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.archivoToolStripMenuItem,
-            this.traducirToolStripMenuItem});
+            this.traducirToolStripMenuItem,
+            this.cerrarToolStripMenuItem,
+            this.exportarToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1193, 28);
@@ -107,8 +111,9 @@
             // 
             // traducirToolStripMenuItem
             // 
+            this.traducirToolStripMenuItem.Font = new System.Drawing.Font("Leelawadee UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.traducirToolStripMenuItem.Name = "traducirToolStripMenuItem";
-            this.traducirToolStripMenuItem.Size = new System.Drawing.Size(62, 24);
+            this.traducirToolStripMenuItem.Size = new System.Drawing.Size(79, 24);
             this.traducirToolStripMenuItem.Text = "Traducir";
             this.traducirToolStripMenuItem.Click += new System.EventHandler(this.traducirToolStripMenuItem_Click);
             // 
@@ -119,14 +124,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(537, 395);
             this.tabControl1.TabIndex = 1;
-            // 
-            // richTextBoxTraducido
-            // 
-            this.richTextBoxTraducido.Location = new System.Drawing.Point(610, 31);
-            this.richTextBoxTraducido.Name = "richTextBoxTraducido";
-            this.richTextBoxTraducido.Size = new System.Drawing.Size(558, 395);
-            this.richTextBoxTraducido.TabIndex = 2;
-            this.richTextBoxTraducido.Text = "";
             // 
             // richTextBox1
             // 
@@ -174,17 +171,41 @@
             this.LineNumberTextBox.TabIndex = 8;
             this.LineNumberTextBox.Text = "";
             // 
+            // cerrarToolStripMenuItem
+            // 
+            this.cerrarToolStripMenuItem.Font = new System.Drawing.Font("Leelawadee UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cerrarToolStripMenuItem.Name = "cerrarToolStripMenuItem";
+            this.cerrarToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
+            this.cerrarToolStripMenuItem.Text = "Cerrar";
+            this.cerrarToolStripMenuItem.Click += new System.EventHandler(this.cerrarToolStripMenuItem_Click);
+            // 
+            // tabControl2
+            // 
+            this.tabControl2.Location = new System.Drawing.Point(609, 31);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(537, 395);
+            this.tabControl2.TabIndex = 9;
+            // 
+            // exportarToolStripMenuItem
+            // 
+            this.exportarToolStripMenuItem.Font = new System.Drawing.Font("Leelawadee UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.exportarToolStripMenuItem.Name = "exportarToolStripMenuItem";
+            this.exportarToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
+            this.exportarToolStripMenuItem.Text = "Exportar";
+            this.exportarToolStripMenuItem.Click += new System.EventHandler(this.exportarToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1193, 627);
+            this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.LineNumberTextBox);
             this.Controls.Add(this.lblColumna);
             this.Controls.Add(this.lblLinea);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.richTextBoxTraducido);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -209,12 +230,14 @@
         private System.Windows.Forms.ToolStripMenuItem cToolStripMenuItem;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.ToolStripMenuItem traducirToolStripMenuItem;
-        private System.Windows.Forms.RichTextBox richTextBoxTraducido;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblLinea;
         private System.Windows.Forms.Label lblColumna;
         private System.Windows.Forms.RichTextBox LineNumberTextBox;
+        private System.Windows.Forms.ToolStripMenuItem cerrarToolStripMenuItem;
+        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.ToolStripMenuItem exportarToolStripMenuItem;
     }
 }
 

@@ -8,16 +8,18 @@ namespace Practica1.sol.com.analyzer
 {
     class Token
     {
-        String _token;
-        String _id;
-        String _fila;
-        String _columna;
+        String _tipo;
+        String _lexema;
+        int _fila;
+        int _columna;
+        String _descripcion;
 
-        public Token(String token, String id, String fila, String columna) {
-            this._token = token;
-            this._id = id;
+        public Token(String tipo, String lexema, int fila, int columna, String descripcion) {
+            this._tipo = tipo;
+            this._lexema = lexema;
             this._fila = fila;
             this._columna = columna;
+            this._descripcion = descripcion;
         }
 
         public Token()
@@ -25,28 +27,35 @@ namespace Practica1.sol.com.analyzer
            
         }
 
-        public string token
+        public string tipo
         {
-            get { return this._token; }
-            private set { this._token = value; }
+            get { return this._tipo; }
+            private set { this._tipo = value; }
         }
 
-        public string id
+        public string lexema
         {
-            get { return this._id; }
-            private set { this._id = value; }
+            get { return this._lexema; }
+            private set { this._lexema = value; }
         }
 
-        public string fila
+        public int fila
         {
             get { return this._fila; }
             private set { this._fila = value; }
         }
 
-        public string columna
+        public int columna
         {
             get { return this._columna; }
             private set { this._columna = value; }
+        }
+
+
+        public string descripcion
+        {
+            get { return this._descripcion; }
+            private set { this._descripcion = value; }
         }
     }
 }

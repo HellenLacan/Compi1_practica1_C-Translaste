@@ -130,6 +130,10 @@ namespace Practica1.sol.com.analizador
             NonTerminal ELSE_OPCIONAL = new NonTerminal("ELSE_OPCIONAL");
             NonTerminal THIS = new NonTerminal("THIS");
             NonTerminal LISTA_THIS = new NonTerminal("LISTA_THIS");
+            NonTerminal LLAMADAS_MET_FUNC = new NonTerminal("LLAMADAS_MET_FUNC");
+            NonTerminal RETURN = new NonTerminal("RETURN");
+            NonTerminal LISTA_LLAMADA_FUN = new NonTerminal("LISTA_LLAMADA_FUN");
+
 
             #endregion
 
@@ -142,13 +146,17 @@ namespace Practica1.sol.com.analizador
             CLASE.Rule = _conteiner + identificador + corcheteAb + SENTENCIAS_DE_CLASE + corcheteCerr;
 
             SENTENCIAS_DE_CLASE.Rule = SENTENCIAS_DE_CLASE + VARIABLES_GLOBALES
+                                   | SENTENCIAS_DE_CLASE + VARIABLES_LOCALES
                                    | SENTENCIAS_DE_CLASE + CONSTRUCTOR
                                    | SENTENCIAS_DE_CLASE + METODOS
                                    | SENTENCIAS_DE_CLASE + FUNCIONES
+                                   | SENTENCIAS_DE_CLASE + LLAMADAS_MET_FUNC
                                    | CONSTRUCTOR
                                    | VARIABLES_GLOBALES
+                                   | VARIABLES_LOCALES
                                    | METODOS
                                    | FUNCIONES
+                                   | LLAMADAS_MET_FUNC
                                    | Empty;
 
             LISTA_SENTENCIAS.Rule = LISTA_SENTENCIAS + SENT_SWITCH
@@ -159,7 +167,9 @@ namespace Practica1.sol.com.analizador
                                    | LISTA_SENTENCIAS + DOWHILE
                                    | LISTA_SENTENCIAS + IF
                                    | LISTA_SENTENCIAS + VARIABLES_LOCALES
+                                   | LISTA_SENTENCIAS + RETURN
                                    | VARIABLES_LOCALES
+                                   | RETURN
                                    | FOR
                                    | WHILE
                                    | DOWHILE
@@ -167,8 +177,12 @@ namespace Practica1.sol.com.analizador
                                    | IF
                                    | PRINT
                                    | BREAK
+                                   | RETURN
                                    | Empty;
 
+            RETURN.Rule = _return + EXPR + ptoYComa
+                    |_return + ptoYComa;
+            
             FOR.Rule = _sfr + parentesisAb + VAR_FOR + identificador + asignacion + EXPR + ptoYComa + EXPR + ptoYComa + INCREMENTO + parentesisCerr + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
 
             WHILE.Rule = _whs + parentesisAb + EXPR + parentesisCerr + corcheteAb + LISTA_SENTENCIAS + corcheteCerr;
@@ -199,7 +213,8 @@ namespace Practica1.sol.com.analizador
                                      | TIPO + identificador + ASIGNACION_VAR + ptoYComa;
 
             VARIABLES_LOCALES.Rule = TIPO + identificador + ASIGNACION_VAR + ptoYComa
-                                     |identificador + ASIGNACION_VAR + ptoYComa 
+                                     |identificador + ASIGNACION_VAR + ptoYComa
+                                     |LLAMADAS_MET_FUNC + ASIGNACION_VAR + ptoYComa
                                      |THIS;
 
             THIS.Rule = _prop + LISTA_THIS + ASIGNACION_VAR + ptoYComa;
@@ -210,8 +225,14 @@ namespace Practica1.sol.com.analizador
             ASIGNACION_VAR.Rule = asignacion + TIPO_ASIGN_VAR
                                  | Empty;
 
-            TIPO_ASIGN_VAR.Rule = EXPR
-                                 | _new + identificador + parentesisAb + LISTA_VARS + parentesisCerr;
+            TIPO_ASIGN_VAR.Rule = EXPR;
+                                  
+
+            LLAMADAS_MET_FUNC.Rule = identificador + LISTA_THIS
+                                    |identificador + LISTA_LLAMADA_FUN;
+
+            LISTA_LLAMADA_FUN.Rule = LISTA_LLAMADA_FUN + pto + identificador + parentesisAb + LISTA_VARS + parentesisCerr
+                                    | pto + identificador + parentesisAb + LISTA_VARS + parentesisCerr;
 
             LISTA_VARS.Rule = LISTA_VARS + coma + EXPR
                              | VARS;
@@ -269,6 +290,7 @@ namespace Practica1.sol.com.analizador
                    | EXPR + _equivalente + EXPR
                    | EXPR + _distinto + EXPR
                    | parentesisAb + EXPR + parentesisCerr
+                   | _new + identificador + parentesisAb + LISTA_VARS + parentesisCerr
                    | _not + EXPR
                    | numero
                    | numeroDecimal
@@ -277,7 +299,8 @@ namespace Practica1.sol.com.analizador
                    | _trus
                    | _fals
                    | menos + EXPR
-                   | mas + EXPR;
+                   | mas + EXPR
+                   | LLAMADAS_MET_FUNC;
             
             #endregion
 

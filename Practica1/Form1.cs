@@ -37,6 +37,20 @@ namespace Practica1
             newTextBox.SelectionChanged += new System.EventHandler(this.newTextBox_SelectionChanged);
             selectionStart = newTextBox.SelectionStart;
 
+            //TAB 2
+
+            TabPage newTabPage2 = new TabPage("New Document");
+            newTabPage2.Font = new Font("Verdana", 18);
+
+            RichTextBox newTextBox2 = new RichTextBox();
+            newTextBox2.Dock = DockStyle.Fill;
+            newTextBox2.Font = new Font("Verdana", 10);
+            newTextBox2.BackColor = Color.White;
+            newTextBox2.BorderStyle = BorderStyle.None;
+
+            newTabPage2.Controls.Add(newTextBox2);
+            tabControl2.TabPages.Add(newTabPage2);
+
             getRichTextBox().Select();
 
             AddLineNumbers();
@@ -112,7 +126,7 @@ namespace Practica1
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
                 openFileDialog.InitialDirectory = (System.Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-                openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                openFileDialog.Filter = "psc files (*.psc)|*.psc";
                 openFileDialog.FilterIndex = 2;
                 openFileDialog.RestoreDirectory = true;
 
@@ -134,7 +148,7 @@ namespace Practica1
             }
         }
 
-        //Control de linea y columna en un richtexBox
+        //Teclas Control de linea y columna en un richtexBox
         private void newTextBox_SelectionChanged(object sender, EventArgs e)
         {
             int index = getRichTextBox().SelectionStart;
@@ -145,6 +159,27 @@ namespace Practica1
             int column = index - firstChar;
 
             lblLinea.Text = "Line: " + (line +1) ;
+            lblColumna.Text = "Col: " + (column + 1);
+
+            Point pt = getRichTextBox().GetPositionFromCharIndex(getRichTextBox().SelectionStart);
+            if (pt.X == 1)
+            {
+                AddLineNumbers();
+            }
+
+        }
+
+        //Control de linea y columna en un richtexBox
+        private void newTextBox_MouseDown(object sender, EventArgs e)
+        {
+            int index = getRichTextBox().SelectionStart;
+            int line = getRichTextBox().GetLineFromCharIndex(index);
+
+            // Get the column.
+            int firstChar = getRichTextBox().GetFirstCharIndexFromLine(line);
+            int column = index - firstChar;
+
+            lblLinea.Text = "Line: " + (line + 1);
             lblColumna.Text = "Col: " + (column + 1);
 
             Point pt = getRichTextBox().GetPositionFromCharIndex(getRichTextBox().SelectionStart);
@@ -178,9 +213,26 @@ namespace Practica1
             newTextBox.TextChanged += new System.EventHandler(this.newTextBox_TextChanged);
             newTextBox.VScroll += new System.EventHandler(this.newTextBox_VScroll);
 
+
             selectionStart = newTextBox.SelectionStart;
             LineNumberTextBox.Text = "1\n2";
-            
+            LineNumberTextBox.Text = "1\n2";
+
+            /*TAB CONTROL NO. 2*/
+
+            TabPage newTabPage2 = new TabPage("New Document.cs");
+            newTabPage2.Font = new Font("Verdana", 18);
+
+            RichTextBox newTextBox2 = new RichTextBox();
+            newTextBox2.Dock = DockStyle.Fill;
+            newTextBox2.Font = new Font("Verdana", 10);
+            newTextBox2.BackColor = Color.White;
+            newTextBox2.BorderStyle = BorderStyle.None;
+
+            newTabPage2.Controls.Add(newTextBox2);
+            tabControl2.TabPages.Add(newTabPage2);
+
+
         }
 
         private void newTextBox_VScroll(object sender, EventArgs e)
@@ -236,7 +288,22 @@ namespace Practica1
 
             return richTextBox;
         }
-        
+
+        private RichTextBox getRichTextBox2()
+        {
+            RichTextBox richTextBox2 = null;
+            TabPage tp = tabControl2.SelectedTab;
+            var tab = tabControl2.SelectedTab;
+
+            if (tp != null)
+            {
+                richTextBox2 = tp.Controls[0] as RichTextBox;
+            }
+
+            return richTextBox2;
+        }
+
+
         private void Form1_Load(object sender, EventArgs e)
         {
         }
@@ -250,15 +317,22 @@ namespace Practica1
 
             if (resultado != null)
             {
-                Console.WriteLine("Analisis Correcto");
+                MessageBox.Show("Analisis Correcto");
+                richTextBox1.Text = "";
                 String text = "";
                 String lenguaje = (Recorrido.recorrerAST(resultado.ChildNodes.ElementAt(0), text));
-                richTextBoxTraducido.Text = lenguaje;
+                getRichTextBox2().Text = lenguaje;
                 Recorrido.traducir(resultado);
                 Syntactic.generarImagen(resultado);
             }
             else {
-                Console.WriteLine("Analisis incorrecto");
+                MessageBox.Show("Analisis con errores");
+                richTextBox1.Text = "";
+
+                foreach (sol.com.analyzer.Token item in Syntactic.lista)
+                {
+                    richTextBox1.Text+= "\nError " + item.tipo +": Lexema: \"" + item.lexema + "\"" + ", Linea: " + item.fila + ", Columna: " + item.columna + ", Descripcion: " + item.descripcion;
+                }
 
             }
         }
@@ -266,6 +340,46 @@ namespace Practica1
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void cerrarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                TabPage currentTab = tabControl1.SelectedTab;
+                tabControl1.TabPages.Remove(currentTab);
+
+                TabPage currentTab2 = tabControl2.SelectedTab;
+                tabControl2.TabPages.Remove(currentTab2);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("No hay pestañas");
+            }
+
+        }
+
+        private void exportarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Stream myStream;
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+
+            saveFileDialog1.Filter = "Cs File | *.cs";
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                if ((myStream = saveFileDialog1.OpenFile()) != null)
+                {
+                    myStream.Close();
+                    using (StreamWriter sw = new StreamWriter(saveFileDialog1.FileName))
+                        sw.WriteLine(getRichTextBox2().Text);
+
+                }
+            }
+
+            String texto = getRichTextBox2().Text;
         }
     }
 }

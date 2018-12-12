@@ -12,38 +12,46 @@ namespace Practica1.sol.com.analyzer
 {
     class Syntactic : Grammar
     {
-        public static List<Token[]> lista = new List<Token[]>();
+        public static List<Token> lista = new List<Token>();
 
-        public ParseTreeNode analyze(String text) {
+        public ParseTreeNode analyze(String cadena) {
+            lista = new List<Token>();
+            Gramatica gramatica = new Gramatica();
+            LanguageData lenguaje = new LanguageData(gramatica);
+            Parser parser = new Parser(lenguaje);
+            ParseTree arbol = parser.Parse(cadena);
+            ParseTreeNode raiz = arbol.Root;
 
-            Gramatica myGrammar = new Gramatica();
-            LanguageData lenguaje = new LanguageData(myGrammar);
-            Parser p = new Parser(lenguaje);
-            ParseTree tree = p.Parse(text);
-            ParseTreeNode root = tree.Root;
-
-            if (root == null)
+            Token tk;
+            if (arbol.Root == null)
             {
-                for (int i = 0; i < tree.ParserMessages.Count(); i++) {
-                    String error = tree.ParserMessages.ElementAt(i).Level.ToString();
-                    String fila = tree.ParserMessages.ElementAt(i).Location.Line.ToString();
-                    String columna = tree.ParserMessages.ElementAt(i).Location.Column.ToString();
-                    String nombre = tree.ParserMessages.ElementAt(i).Message.ToString();
+                for (int i = 0; i < arbol.ParserMessages.Count(); i++) {
+                    String error = arbol.ParserMessages.ElementAt(i).Level.ToString();
+                    int fila = arbol.ParserMessages.ElementAt(i).Location.Line;
+                    int columna = arbol.ParserMessages.ElementAt(i).Location.Column;
+                    String nombre = arbol.ParserMessages.ElementAt(i).Message.ToString();
 
-                    string[] separatingChars = { "'" };
-                    string[] cadena = nombre.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
+                    string tipoError = nombre.Substring(0, 6);
+                    Console.WriteLine("Substring: {0}", tipoError);
 
-                    string[] separatingChars2 = { ":" };
-                    string[] espectativa = nombre.Split(separatingChars, System.StringSplitOptions.RemoveEmptyEntries);
-                    
-                    Token token = new Token();
+                    if (tipoError != "Syntax")
+                    {
+                        String caracter = nombre.Split('\'', '\'')[1];
+                        tk = new Token("Lexico", caracter, fila + 1, columna + 1, "El caracter no pertenece al lenguaje");
+                        lista.Add(tk);
+                    }
+                    else
+                    {
+                        tk = new Token("Sintactico", "", fila + 1, columna + 1, nombre);
+                        lista.Add(tk);
+                    }
                 }
             }
             else {
 
             }
 
-            return root;
+            return arbol.Root;
         }
 
         public static void generarImagen(ParseTreeNode raiz) {

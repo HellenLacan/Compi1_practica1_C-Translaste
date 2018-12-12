@@ -17,7 +17,6 @@ namespace Practica1.sol.com.analyzer
         }
 
         public static String recorrerAST(ParseTreeNode root, String lenguajeCS) {
-
             switch (root.Term.Name) {
                 case "LISTA_CLASES":
 
@@ -59,10 +58,17 @@ namespace Practica1.sol.com.analyzer
                                 case "VARIABLES_GLOBALES":
                                     return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
 
+                                case "VARIABLES_LOCALES":
+                                    String sentencias = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                                    return sentencias;
+
                                 case "METODOS":
                                     return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
 
                                 case "FUNCIONES":
+                                    return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+
+                                case "LLAMADAS_MET_FUNC":
                                     return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
 
                             }
@@ -104,7 +110,7 @@ namespace Practica1.sol.com.analyzer
                             //Reconoce Expresion
                             expresion = recorrerAST(root.ChildNodes.ElementAt(3), lenguajeCS);
 
-                            return "\n\t" + visibilidad + " " + tipo + " " + idVar[0] + expresion + ";";
+                            return "\n\t" + visibilidad + " " + tipo + " " + idVar[0] +expresion + ";";
 
 
                         case 3:
@@ -182,6 +188,10 @@ namespace Practica1.sol.com.analyzer
                         case "EXPR":
                             return " = " + recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
 
+                        case "LLAMADAS_MET_FUNC":
+                            String llamadas_metodos = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                            return llamadas_metodos;
+
                         default:
                             String[] id_tipoAsingVar = (root.ChildNodes.ElementAt(1).ToString()).Split();
                             String parametros = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
@@ -205,6 +215,8 @@ namespace Practica1.sol.com.analyzer
                                 return "true";
                             } else if (hoja == "fals (identificador)") {
                                 return "false";
+                            } else if (hoja == "LLAMADAS_MET_FUNC") {
+                                return recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
                             }
 
                             if (root.ChildNodes.ElementAt(0).Term.Name == "cadena") {
@@ -219,6 +231,10 @@ namespace Practica1.sol.com.analyzer
                             break;
                         case 2:
                             String[] signoN = (root.ChildNodes.ElementAt(0)).ToString().Split(' ');
+
+                            if (signoN[0] == "not" ) {
+                                return "!";
+                            }
                             hoja = signoN[0] + " " + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
                             return hoja;
 
@@ -276,17 +292,14 @@ namespace Practica1.sol.com.analyzer
 
                                 }
                             }
+                            else {
+                                //INSTANCIAS
+                                String[] id_new = root.ChildNodes.ElementAt(1).ToString().Split();
+                                String parametros = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS);
+
+                                return " new " + id_new[0] + "(" + parametros + ")";
+                            }
                             break;
-                            //String[] n1 = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS).Split(' ');
-                            //String[] n2 = recorrerAST(root.ChildNodes.ElementAt(2), lenguajeCS).Split(' ');
-                            //String[] signo = (root.ChildNodes.ElementAt(1).ToString()).Split(' ') ;
-
-
-
-                            //    default:
-                            //        return (n1[0] + recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS) + n2[0]);
-
-                            //}
 
                     }
 
@@ -588,9 +601,18 @@ namespace Practica1.sol.com.analyzer
                             return "\n\t\tthis" +  varLocal + ";";
                             
                         case 2:
-                            String[] id1 = root.ChildNodes.ElementAt(0).ToString().Split(' '); ;
-                            String asign = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
-                            return "\n\t\t" +id1[0] + " "+asign + ";";
+                            String asign;
+                            if (root.ChildNodes.ElementAt(0).Term.Name == "LLAMADAS_MET_FUNC")
+                            {
+                                String idVar = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
+                                asign = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                                return "\n\t\t" + idVar + " " + asign + ";";
+                            }
+                            else {
+                                String[] id1 = root.ChildNodes.ElementAt(0).ToString().Split(' '); ;
+                                asign = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                                return "\n\t\t" + id1[0] + " " + asign + ";";
+                            }
                         case 3:
                             
                             tipo = recorrerAST(root.ChildNodes.ElementAt(0), lenguajeCS);
@@ -618,7 +640,33 @@ namespace Practica1.sol.com.analyzer
 
                     }
                     break;
-                    
+                case "LLAMADAS_MET_FUNC":
+                   
+                        String[] _name = (root.ChildNodes.ElementAt(0)).ToString().Split(' ');
+                        lista = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+
+                        return _name[0] + lista;
+
+                case "RETURN":
+
+                    switch (root.ChildNodes.Count) {
+                        case 1:
+                            return "\n\t\treturn;";
+
+                        case 2:
+                            lista = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+                            return "\n\t\treturn " + lista + ";";
+                    }
+
+                    break;
+
+                case "LISTA_LLAMADA_FUN":
+                    String[] _name2 = (root.ChildNodes.ElementAt(0)).ToString().Split(' ');
+                    lista = recorrerAST(root.ChildNodes.ElementAt(1), lenguajeCS);
+
+                    return "."+_name2[0] + lista;
+
+
             }
 
             return lenguajeCS;
